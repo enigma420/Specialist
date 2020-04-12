@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 public class Specialist {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     String name;
@@ -23,10 +23,19 @@ public class Specialist {
     @CollectionTable(name = "listOfProfession")
     List<String> profession = new ArrayList<>();
 
-    @Pattern(regexp="(^$|[0-9]{9})||(^$|[0-9]{11})")
+    @Pattern(regexp="(^$|[0-9]{9})")
     String phoneNumber;
 
     public Specialist() {
+    }
+
+    public Specialist(String name,String surname,Province province, String city, List<String> profession, String phoneNumber) {
+        this.name = name;
+        this.surname = surname;
+        this.province = province;
+        this.city = city;
+        this.profession = profession;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
