@@ -1,22 +1,25 @@
 package pl.specialist.searchexpert.domains.specialist;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.STRING)
 public enum Province {
 
-    DOLNOŚLĄSKIE,
+    DOLNOSLASKIE,
     KUJAWSKO_POMORSKIE,
     LUBELSKIE,
     LUBUSKIE,
-    ŁÓDZKIE,
-    MAŁOPOLSKIE,
+    LODZKIE,
+    MALOPOLSKIE,
     MAZOWIECKIE,
     OPOLSKIE,
     PODKARPACKIE,
     PODLASKIE,
     POMORSKIE,
-    ŚLĄSKIE,
-    ŚWIĘTOKRZYSKIE,
-    WARMIŃSKO_MAZURSKIE,
+    SLASKIE,
+    SWIETOKRZYSKIE,
+    WARMINSKO_MAZURSKIE,
     WIELKOPOLSKIE,
-    ZACHODNIOPOMORSKIE
+    ZACHODNIOPOMORSKIE;
 
 }
