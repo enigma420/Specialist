@@ -2,6 +2,8 @@ package pl.specialist.searchexpert.repositories;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
@@ -18,33 +20,19 @@ public interface SpecialistRepo extends JpaRepository<Specialist,Long> {
     <S extends Specialist> S save(S s);
 
     @Override
-    <S extends Specialist> List<S> saveAll(Iterable<S> iterable);
-
-    @Override
     List<Specialist> findAll();
 
     @Override
     void delete(Specialist specialist);
 
-    @Override
-    void deleteAll();
+    Specialist findBySpecialistId(String id);
+    Specialist findByMail(String mail);
 
-    Specialist findSpecialistById(Long id);
-
-    /*Find SPECIALISTS by name and surname*/
+    /*Find SPECIALISTS by personal identity*/
+    @Query("SELECT c FROM Specialist c WHERE (:name is null or c.name = :name) and (:surname is null or c.surname = :surname)")
     Iterable<Specialist> findSpecialistsByNameAndSurname(String name,String surname);
 
-    /*Find SPECIALISTS by location*/
-    Iterable<Specialist> findSpecialistsByProvince(Province province);
-    Iterable<Specialist> findSpecialistsByCity(String city);
-    Iterable<Specialist> findSpecialistsByProvinceAndCity(Province province, String city);
-
-    /*Find SPECIALISTS by profession*/
-    Iterable<Specialist> findSpecialistsByProfession(String profession);
-
-    /*MIXED*/
     /*Find SPECIALIST by location and profession*/
-    Iterable<Specialist> findSpecialistsByProvinceAndProfession(Province province, String profession);
-    Iterable<Specialist> findSpecialistsByCityAndProfession(String city, String profession);
-    Iterable<Specialist> findSpecialistsByProvinceAndCityAndProfession(Province province,String city,String profession);
+    @Query("SELECT c FROM Specialist c WHERE (:province is null or c.province = :province) and (:city is null or c.city = :city) and(:profession is null or c.profession = :profession)")
+    Iterable<Specialist> findSpecialistsByProvinceAndCityAndProfession(@Param("province")Province province,@Param("city")String city,@Param("profession")String profession);
 }
