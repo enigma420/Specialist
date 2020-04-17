@@ -6,10 +6,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
+import pl.specialist.searchexpert.exceptions.SpecialistIdException;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.SpecialistService;
 
 import javax.validation.Valid;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/specialist")
@@ -17,7 +21,6 @@ import javax.validation.Valid;
 public class SpecialistController {
 
     private final SpecialistService specialistService;
-
 
     private final MapValidationErrorService mapValidationErrorService;
 
@@ -80,9 +83,9 @@ public class SpecialistController {
     }
 
     @GetMapping("/get/")
-    public Iterable<Specialist> getSpecialistsByProvinceAndCityAndProfession(@RequestParam(value = "province",required = false) Province province,
-                                                                             @RequestParam(value = "city",required = false)String city,
-                                                                             @RequestParam(value = "profession", required = false) String profession){
+    public HashSet<Specialist> getSpecialistsByProvinceAndCityAndProfession(@RequestParam(value = "province",required = false) Province province,
+                                                                            @RequestParam(value = "city",required = false)String city,
+                                                                            @RequestParam(value = "profession", required = false) List<String> profession){
         return specialistService.findSpecialists(province,city,profession);
     }
 

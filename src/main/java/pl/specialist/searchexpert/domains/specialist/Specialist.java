@@ -3,12 +3,10 @@ package pl.specialist.searchexpert.domains.specialist;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,35 +22,39 @@ public class Specialist {
     @NotBlank(message = "Surname may not be blank")
     @Size(min = 3, max = 20, message = "Name must be between 2 and 32 characters")
     String surname;
-//    @NotBlank(message = "Province may not be blank")
+    @NotNull(message = "Province may not be blank")
     Province province;
     @NotBlank(message = "City may not be blank")
     @Size(min = 3, max = 25, message = "City must be between 2 and 32 characters")
     String city;
-//    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    @NotBlank(message = "Profession may not be blank")
-    @Size(min = 3, max = 25, message = "Profession must be between 2 and 32 characters")
-//    @ElementCollection
-//    @CollectionTable(name = "listOfProfession")
-    String profession;
+    //    @Size(min = 3, max = 25, message = "Profession must be between 2 and 32 characters")
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    @NotEmpty(message = "City may not be empty")
+    @ElementCollection
+    @Column(name = "professions", nullable = false)
+    List<String> professions;
     @NotBlank(message = "Profession may not be blank")
     @Pattern(regexp="(^$|[0-9]{9})")
     String phoneNumber;
     @NotBlank(message = "Email may not be blank")
     @Email
     String mail;
+    @Min(0)
+    @Max(5)
+    Double stars = 0.0;
 
     public Specialist() {
     }
 
-    public Specialist(String name,String surname,Province province, String city, String profession, String phoneNumber,String mail) {
+    public Specialist(String name,String surname,Province province, String city, List<String> professions, String phoneNumber,String mail,Double stars) {
         this.name = name;
         this.surname = surname;
         this.province = province;
         this.city = city;
-        this.profession = profession;
+        this.professions = professions;
         this.phoneNumber = phoneNumber;
         this.mail = mail;
+        this.stars = stars;
     }
 
     public String getSpecialistId() {
@@ -95,12 +97,12 @@ public class Specialist {
         this.city = city;
     }
 
-    public String getProfession() {
-        return profession;
+    public List<String> getProfessions() {
+        return professions;
     }
 
-    public void setProfession(String profession) {
-        this.profession = profession;
+    public void setProfessions(List<String> professions) {
+        this.professions = professions;
     }
 
     public String getPhoneNumber() {
@@ -117,5 +119,13 @@ public class Specialist {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public Double getStars() {
+        return stars;
+    }
+
+    public void setStars(Double stars) {
+        this.stars = stars;
     }
 }

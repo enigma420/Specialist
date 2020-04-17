@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 @Repository
@@ -33,6 +35,10 @@ public interface SpecialistRepo extends JpaRepository<Specialist,Long> {
     Iterable<Specialist> findSpecialistsByNameAndSurname(String name,String surname);
 
     /*Find SPECIALIST by location and profession*/
-    @Query("SELECT c FROM Specialist c WHERE (:province is null or c.province = :province) and (:city is null or c.city = :city) and(:profession is null or c.profession = :profession)")
-    Iterable<Specialist> findSpecialistsByProvinceAndCityAndProfession(@Param("province")Province province,@Param("city")String city,@Param("profession")String profession);
+
+    /*Find SPECIALIST by location and profession*/
+    @Query("SELECT c FROM Specialist c WHERE (:province is null or c.province = :province)  and (:city is null or c.city = :city) and (:professions is null or c.professions in (:professions))")
+    HashSet<Specialist> findSpecialistsByProvinceAndCityAndProfessionsIn(@Param("province")Province province, @Param("city")String city, @Param("professions") List<String> professions);
+//    @Query("SELECT c FROM Specialist c WHERE (:province is null or c.province = :province)  and (:city is null or c.city = :city) and (:professions is null or c.professions in (:professions))")
+//    HashSet<Specialist> findSpecialistsByProvinceAndCityAndProfession(@Param("province")Province province, @Param("city")String city, @Param("professions") List<String> professions);
 }
