@@ -1,17 +1,15 @@
 package pl.specialist.searchexpert.domains.customer;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
-import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.List;
+
 import java.util.Set;
 
 @Entity
+@Table(name = "customer")
 public class Customer {
 
     @Id
@@ -33,9 +31,9 @@ public class Customer {
 
     @ManyToMany
     @JoinTable(
-            name = "specialists_mark",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "specialist_id")
+    name = "specialists_mark",
+    joinColumns = @JoinColumn(name = "customer_id"),
+    inverseJoinColumns = @JoinColumn(name = "specialist_id")
     )
     private Set<Specialist> markedSpecialists;
 
@@ -44,6 +42,13 @@ public class Customer {
 
     public Customer(String customerId, String nickname, String city, String phoneNumber, String mail){
         this.customerId = customerId;
+        this.nickname = nickname;
+        this.city = city;
+        this.phoneNumber = phoneNumber;
+        this.mail = mail;
+    }
+
+    public Customer( String nickname, String city, String phoneNumber, String mail){
         this.nickname = nickname;
         this.city = city;
         this.phoneNumber = phoneNumber;

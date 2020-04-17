@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "specialist")
 public class Specialist {
     @Id
     @GeneratedValue(generator = "uuid")

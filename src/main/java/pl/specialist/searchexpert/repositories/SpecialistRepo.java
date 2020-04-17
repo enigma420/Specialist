@@ -33,10 +33,6 @@ public interface SpecialistRepo extends JpaRepository<Specialist,Long> {
     HashSet<Specialist> findSpecialistsByNameAndSurname(String name,String surname);
 
     /*Find SPECIALIST by location and profession*/
-
-    /*Find SPECIALIST by location and profession*/
     @Query("SELECT c FROM Specialist c WHERE (:province is null or c.province = :province)  and (:city is null or c.city = :city) and (:professions is null or c.professions in (:professions))")
     HashSet<Specialist> findSpecialistsByProvinceAndCityAndProfessionsIn(@Param("province")Province province, @Param("city")String city, @Param("professions") List<String> professions);
-//    @Query("SELECT c FROM Specialist c WHERE (:province is null or c.province = :province)  and (:city is null or c.city = :city) and (:professions is null or c.professions in (:professions))")
-//    HashSet<Specialist> findSpecialistsByProvinceAndCityAndProfession(@Param("province")Province province, @Param("city")String city, @Param("professions") List<String> professions);
 }
