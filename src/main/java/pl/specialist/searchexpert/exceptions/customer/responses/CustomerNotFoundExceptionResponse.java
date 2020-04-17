@@ -1,27 +1,27 @@
-package pl.specialist.searchexpert.exceptions;
+package pl.specialist.searchexpert.exceptions.customer.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public class SpecialistNotFoundExceptionResponse {
+public class CustomerNotFoundExceptionResponse {
 
-    private String SpecialistNotFound;
+    private String CustomerNotFound;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime timestamp;
     private int status;
 
 
-    public SpecialistNotFoundExceptionResponse(String specialistNotFound) {
-        SpecialistNotFound = specialistNotFound;
+    public CustomerNotFoundExceptionResponse(String customerNotFound) {
+        customerNotFound = customerNotFound;
     }
 
-    public String getSpecialistNotFound() {
-        return SpecialistNotFound;
+    public String getCustomerNotFound() {
+        return CustomerNotFound;
     }
 
-    public void setSpecialistNotFound(String specialistNotFound) {
-        SpecialistNotFound = specialistNotFound;
+    public void setCustomerNotFound(String customerNotFound) {
+        CustomerNotFound = customerNotFound;
     }
 
     public LocalDateTime getTimestamp() {
@@ -40,5 +40,3 @@ public class SpecialistNotFoundExceptionResponse {
         this.status = status;
     }
 }
-
-

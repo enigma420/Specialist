@@ -1,4 +1,4 @@
-package pl.specialist.searchexpert.services;
+package pl.specialist.searchexpert.services.specialist;
 
 import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;

@@ -1,6 +1,5 @@
 package pl.specialist.searchexpert.repositories;
 
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -32,7 +30,7 @@ public interface SpecialistRepo extends JpaRepository<Specialist,Long> {
 
     /*Find SPECIALISTS by personal identity*/
     @Query("SELECT c FROM Specialist c WHERE (:name is null or c.name = :name) and (:surname is null or c.surname = :surname)")
-    Iterable<Specialist> findSpecialistsByNameAndSurname(String name,String surname);
+    HashSet<Specialist> findSpecialistsByNameAndSurname(String name,String surname);
 
     /*Find SPECIALIST by location and profession*/
 

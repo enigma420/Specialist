@@ -1,14 +1,12 @@
-package pl.specialist.searchexpert.services;
+package pl.specialist.searchexpert.services.specialist;
 
 import org.springframework.stereotype.Service;
 import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
-import pl.specialist.searchexpert.exceptions.SpecialistIdException;
-import pl.specialist.searchexpert.exceptions.SpecialistNotFoundException;
+import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistIdException;
+import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistNotFoundException;
 import pl.specialist.searchexpert.repositories.SpecialistRepo;
 
-
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -36,8 +34,10 @@ public class SpecialistServiceImpl implements SpecialistService{
         else{
             if(!specialist.getSpecialistId().equals(existingSpecialist.getSpecialistId())) throw new SpecialistIdException("Cannot change SpecialistId");
             if(!specialist.getMail().equals(existingSpecialist.getMail())) throw new SpecialistIdException("Cannot change email address");
+            if(!specialist.getStars().equals(existingSpecialist.getStars())) throw new SpecialistIdException("Cannot change stars");
             specialist.setSpecialistId(specialistRepo.findBySpecialistId(specialist.getSpecialistId()).getSpecialistId());
             specialist.setMail(specialistRepo.findByMail(specialist.getMail()).getMail());
+            specialist.setStars(specialistRepo.findBySpecialistId(specialist.getSpecialistId()).getStars());
         }
         return specialistRepo.save(specialist);
     }
@@ -75,10 +75,10 @@ public class SpecialistServiceImpl implements SpecialistService{
         return specialistRepo.findAll();
     }
     @Override
-    public Iterable<Specialist> findSpecialistsByPersonalIdentity(String name, String surname){
+    public HashSet<Specialist> findSpecialistsByPersonalIdentity(String name, String surname){
         if(specialistRepo.count() == 0) throw new SpecialistNotFoundException("Any Specialists isn't exist");
-        Iterable<Specialist> groupOfSpecialists = specialistRepo.findSpecialistsByNameAndSurname(name,surname);
-        if(StreamSupport.stream(groupOfSpecialists.spliterator(),false).count() == 0) throw new SpecialistNotFoundException("Any Specialist with the given data was not found");
+        HashSet<Specialist> groupOfSpecialists = specialistRepo.findSpecialistsByNameAndSurname(name,surname);
+        if(groupOfSpecialists.size() == 0) throw new SpecialistNotFoundException("Any Specialist with the given data was not found");
         return groupOfSpecialists;
     }
 
