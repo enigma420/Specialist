@@ -1,4 +1,4 @@
-package pl.specialist.searchexpert.exceptions;
+package pl.specialist.searchexpert.exceptions.specialist.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

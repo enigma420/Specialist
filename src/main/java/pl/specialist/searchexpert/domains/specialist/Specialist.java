@@ -1,14 +1,13 @@
 package pl.specialist.searchexpert.domains.specialist;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.beans.factory.annotation.Value;
+import pl.specialist.searchexpert.domains.customer.Customer;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Specialist {
@@ -42,6 +41,9 @@ public class Specialist {
     @Min(0)
     @Max(5)
     Double stars = 0.0;
+
+    @ManyToMany(mappedBy = "markedSpecialists")
+    Set<Customer> marks;
 
     public Specialist() {
     }

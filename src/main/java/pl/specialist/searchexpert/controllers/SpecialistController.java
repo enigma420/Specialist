@@ -6,12 +6,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
-import pl.specialist.searchexpert.exceptions.SpecialistIdException;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
-import pl.specialist.searchexpert.services.SpecialistService;
+import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,12 +18,12 @@ import java.util.List;
 @CrossOrigin
 public class SpecialistController {
 
-    private final SpecialistService specialistService;
+    private final SpecialistServiceImpl specialistServiceImpl;
 
     private final MapValidationErrorService mapValidationErrorService;
 
-    public SpecialistController(SpecialistService specialistService, MapValidationErrorService mapValidationErrorService) {
-        this.specialistService = specialistService;
+    public SpecialistController(SpecialistServiceImpl specialistServiceImpl, MapValidationErrorService mapValidationErrorService) {
+        this.specialistServiceImpl = specialistServiceImpl;
         this.mapValidationErrorService = mapValidationErrorService;
     }
 
@@ -35,7 +33,7 @@ public class SpecialistController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if(errorMap != null) return errorMap;
 
-        Specialist newSpecialist = specialistService.createSpecialistAccount(specialist);
+        Specialist newSpecialist = specialistServiceImpl.createSpecialistAccount(specialist);
         return new ResponseEntity<>(newSpecialist, HttpStatus.CREATED);
     }
 
@@ -44,26 +42,26 @@ public class SpecialistController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if(errorMap != null) return errorMap;
 
-        Specialist existingSpecialist = specialistService.updateSpecialistAccount(specialist);
+        Specialist existingSpecialist = specialistServiceImpl.updateSpecialistAccount(specialist);
         return new ResponseEntity<>(existingSpecialist,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{specialistId}")
     public ResponseEntity<?> deleteSpecialist(@PathVariable("specialistId") String specialistId){
-        specialistService.deleteSpecialistBySpecialistId(specialistId);
+        specialistServiceImpl.deleteSpecialistBySpecialistId(specialistId);
         return new ResponseEntity<>("Specialist with ID: '" + specialistId + "' was deleted",HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteAll")
     public ResponseEntity<?> deleteAllSpecialists(){
-        specialistService.deleteAllSpecialists();
+        specialistServiceImpl.deleteAllSpecialists();
         return new ResponseEntity<>("All Specialists was deleted",HttpStatus.OK);
     }
 
     @GetMapping("/getById/{specialistId}")
     public ResponseEntity<?> getSpecialistById(@PathVariable("specialistId") String specialistId){
 
-        Specialist specialist = specialistService.findSpecialistById(specialistId);
+        Specialist specialist = specialistServiceImpl.findSpecialistById(specialistId);
 
         return new ResponseEntity<>(specialist,HttpStatus.OK);
     }
@@ -71,27 +69,30 @@ public class SpecialistController {
     @GetMapping("/getByMail/{mail}")
     public ResponseEntity<?> getSpecialistByMail(@PathVariable("mail") String mail){
 
-        Specialist specialist = specialistService.findSpecialistByMail(mail);
+        Specialist specialist = specialistServiceImpl.findSpecialistByMail(mail);
 
         return new ResponseEntity<>(specialist,HttpStatus.OK);
     }
 
-    @GetMapping("/getByPersonal/")
-    public Iterable<Specialist> getSpecialistsByPersonalIdentity(@RequestParam(value = "name", required = false) String name,
+    @GetMapping("/getByPersonal")
+    public ResponseEntity<HashSet<Specialist>> getSpecialistsByPersonalIdentity(@RequestParam(value = "name", required = false) String name,
                                                                  @RequestParam(value = "surname", required = false) String surname){
-        return specialistService.findSpecialistsByPersonalIdentity(name,surname);
+        HashSet<Specialist> groupOfSpecialists = specialistServiceImpl.findSpecialistsByPersonalIdentity(name,surname);
+        return new ResponseEntity<>(groupOfSpecialists,HttpStatus.OK);
     }
 
-    @GetMapping("/get/")
-    public HashSet<Specialist> getSpecialistsByProvinceAndCityAndProfession(@RequestParam(value = "province",required = false) Province province,
+    @GetMapping("/get")
+    public ResponseEntity<HashSet<Specialist>> getSpecialistsByProvinceAndCityAndProfession(@RequestParam(value = "province",required = false) Province province,
                                                                             @RequestParam(value = "city",required = false)String city,
                                                                             @RequestParam(value = "profession", required = false) List<String> profession){
-        return specialistService.findSpecialists(province,city,profession);
+        HashSet<Specialist> groupOfSpecialists = specialistServiceImpl.findSpecialists(province,city,profession);
+        return new ResponseEntity<>(groupOfSpecialists,HttpStatus.OK);
     }
 
     @GetMapping("/getAll")
-    public Iterable<Specialist> getAllSpecialists(){
-        return specialistService.findAllSpecialists();
+    public ResponseEntity<Iterable<Specialist>> getAllSpecialists(){
+       Iterable<Specialist> allSpecialists = specialistServiceImpl.findAllSpecialists();
+        return new ResponseEntity<>(allSpecialists,HttpStatus.OK);
     }
 
 }
