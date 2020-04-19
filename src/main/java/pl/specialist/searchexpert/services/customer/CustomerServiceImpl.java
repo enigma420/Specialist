@@ -2,17 +2,23 @@ package pl.specialist.searchexpert.services.customer;
 
 import org.springframework.stereotype.Service;
 import pl.specialist.searchexpert.domains.customer.Customer;
+import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerIdException;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerNotFoundException;
+import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistNotFoundException;
 import pl.specialist.searchexpert.repositories.CustomerRepo;
+import pl.specialist.searchexpert.repositories.SpecialistRepo;
 
 @Service
 public class CustomerServiceImpl implements CustomerService{
 
     private final CustomerRepo customerRepo;
 
-    public CustomerServiceImpl(CustomerRepo customerRepo) {
+    private final SpecialistRepo specialistRepo;
+
+    public CustomerServiceImpl(CustomerRepo customerRepo,SpecialistRepo specialistRepo) {
         this.customerRepo = customerRepo;
+        this.specialistRepo = specialistRepo;
     }
 
     @Override
@@ -40,6 +46,9 @@ public class CustomerServiceImpl implements CustomerService{
         }
         return customerRepo.save(customer);
     }
+
+
+
     @Override
     public void deleteCustomerByCustomerId(String customerId){
 
@@ -88,5 +97,8 @@ public class CustomerServiceImpl implements CustomerService{
         if(customerRepo.count() == 0) throw new CustomerNotFoundException("Any Customer isn't exist");
         return customerRepo.findAll();
     }
+
+    /*Specialist*/
+
 
 }

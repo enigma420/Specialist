@@ -4,7 +4,6 @@ import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 
 import java.util.HashSet;
-import java.util.List;
 
 public interface SpecialistService {
 
@@ -16,5 +15,7 @@ public interface SpecialistService {
     Specialist findSpecialistByMail(String mail);
     Iterable<Specialist> findAllSpecialists();
     Iterable<Specialist> findSpecialistsByPersonalIdentity(String name, String surname);
-    HashSet<Specialist> findSpecialists(Province province, String city, List<String> profession);
+    HashSet<Specialist> findSpecialists(Province province, String city, String profession);
+    Specialist updateSpecialistRate(Specialist specialist, Integer stars);
+
 }

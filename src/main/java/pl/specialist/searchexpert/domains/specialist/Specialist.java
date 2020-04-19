@@ -17,22 +17,19 @@ public class Specialist {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     String specialistId;
     @NotBlank(message = "Name may not be blank")
-    @Size(min = 3, max = 20, message = "Name must be between 2 and 32 characters")
+    @Size(min = 3, max = 20, message = "Name must be between 2 and 20 characters")
     String name;
     @NotBlank(message = "Surname may not be blank")
-    @Size(min = 3, max = 20, message = "Name must be between 2 and 32 characters")
+    @Size(min = 3, max = 20, message = "Name must be between 2 and 20 characters")
     String surname;
     @NotNull(message = "Province may not be blank")
     Province province;
     @NotBlank(message = "City may not be blank")
-    @Size(min = 3, max = 25, message = "City must be between 2 and 32 characters")
+    @Size(min = 3, max = 25, message = "City must be between 2 and 25 characters")
     String city;
-    //    @Size(min = 3, max = 25, message = "Profession must be between 2 and 32 characters")
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    @NotEmpty(message = "City may not be empty")
-    @ElementCollection
-    @Column(name = "professions", nullable = false)
-    List<String> professions;
+    @NotBlank(message = "profession may not be blank")
+    @Size(min = 3, max = 25, message = "Profession must be between 2 and 25 characters")
+    String profession;
     @NotBlank(message = "Profession may not be blank")
     @Pattern(regexp="(^$|[0-9]{9})")
     String phoneNumber;
@@ -41,7 +38,8 @@ public class Specialist {
     String mail;
     @Min(0)
     @Max(5)
-    Double stars = 0.0;
+    Double rateStars = 0.0;
+    Integer numberOfRatings = 0;
 
     @ManyToMany(mappedBy = "markedSpecialists")
     Set<Customer> marks;
@@ -49,15 +47,16 @@ public class Specialist {
     public Specialist() {
     }
 
-    public Specialist(String name,String surname,Province province, String city, List<String> professions, String phoneNumber,String mail,Double stars) {
+    public Specialist(String name,String surname,Province province, String city, String profession, String phoneNumber,String mail,Double rateStars,Integer numberOfRatings) {
         this.name = name;
         this.surname = surname;
         this.province = province;
         this.city = city;
-        this.professions = professions;
+        this.profession = profession;
         this.phoneNumber = phoneNumber;
         this.mail = mail;
-        this.stars = stars;
+        this.rateStars = rateStars;
+        this.numberOfRatings = numberOfRatings;
     }
 
     public String getSpecialistId() {
@@ -100,12 +99,12 @@ public class Specialist {
         this.city = city;
     }
 
-    public List<String> getProfessions() {
-        return professions;
+    public String getProfession() {
+        return profession;
     }
 
-    public void setProfessions(List<String> professions) {
-        this.professions = professions;
+    public void setProfession(String profession) {
+        this.profession = profession;
     }
 
     public String getPhoneNumber() {
@@ -124,11 +123,27 @@ public class Specialist {
         this.mail = mail;
     }
 
-    public Double getStars() {
-        return stars;
+    public Double getRateStars() {
+        return rateStars;
     }
 
-    public void setStars(Double stars) {
-        this.stars = stars;
+    public void setRateStars(Double rateStars) {
+        this.rateStars = rateStars;
+    }
+
+    public Integer getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(Integer numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
+    }
+
+    public Set<Customer> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(Set<Customer> marks) {
+        this.marks = marks;
     }
 }
