@@ -30,18 +30,12 @@ public class SpecialistRepoUnitTest {
     private SpecialistRepo specialistRepo;
 
     /*Five various specialists helpful to implement tests*/
-    /*Specialist can perform several professions*/
-    private static final List<String> firstProfessionsSet = new ArrayList<>();
-    private static final List<String> secondProfessionSet = new ArrayList<>();
-    private static final List<String> thirdProfessionSet = new ArrayList<>();
-    private static final List<String> fourthProfessionSet = new ArrayList<>();
-    private static final List<String> fifthProfessionSet = new ArrayList<>();
 
-    private static final Specialist first_specialist = new Specialist( "Tony", "Hawk", Province.MAZOWIECKIE, "Warszawa", firstProfessionsSet, "795034234","danke1@op.pl",3.4);
-    private static final Specialist second_specialist = new Specialist( "Anthony", "Joshua", Province.DOLNOSLASKIE, "Katowice", secondProfessionSet, "503942034","enigma532@op.pl",2.1);
-    private static final Specialist third_specialist = new Specialist( "Mike", "Tyson", Province.WIELKOPOLSKIE, "Poznań", thirdProfessionSet, "593032123","enigma32@op.pl",4.8);
-    private static final Specialist fourth_specialist = new Specialist( "Martin", "Dudziuk", Province.MAZOWIECKIE, "Warszawa", fourthProfessionSet, "739403593","danke123@op.pl",1.8);
-    private static final Specialist fifth_specialist = new Specialist( "Charles", "Montana", Province.LUBUSKIE, "Opole", fifthProfessionSet, "512493053","danke12@op.pl",3.3);
+    private static final Specialist first_specialist = new Specialist( "Tony", "Hawk", Province.MAZOWIECKIE, "Warszawa", "plumber", "795034234","danke1@op.pl",3.4,3);
+    private static final Specialist second_specialist = new Specialist( "Anthony", "Joshua", Province.DOLNOSLASKIE, "Katowice", "mechanic", "503942034","enigma532@op.pl",2.1,6);
+    private static final Specialist third_specialist = new Specialist( "Mike", "Tyson", Province.WIELKOPOLSKIE, "Poznań", "painter", "593032123","enigma32@op.pl",4.8,12);
+    private static final Specialist fourth_specialist = new Specialist( "Martin", "Dudziuk", Province.MAZOWIECKIE, "Warszawa", "tutor", "739403593","danke123@op.pl",1.8,31);
+    private static final Specialist fifth_specialist = new Specialist( "Charles", "Montana", Province.LUBUSKIE, "Opole", "automatic", "512493053","danke12@op.pl",3.3,9);
 
     /*Searching a group of specialists at once*/
     private static final List<Specialist> groupOfSpecialists = new ArrayList<>();
@@ -50,17 +44,6 @@ public class SpecialistRepoUnitTest {
     @BeforeClass
     public static void initializeSpecialistsIntoRepository() {
         // given
-        firstProfessionsSet.add("plumber");
-        firstProfessionsSet.add("electrician");
-        secondProfessionSet.add("mechanic");
-        secondProfessionSet.add("painter");
-        thirdProfessionSet.add("tutor");
-        thirdProfessionSet.add("trainer");
-        fourthProfessionSet.add("plumber");
-        fourthProfessionSet.add("counselor");
-        fifthProfessionSet.add("automatic");
-        fifthProfessionSet.add("doctor");
-        fifthProfessionSet.add("tutor");
         groupOfSpecialists.add(first_specialist);
         groupOfSpecialists.add(second_specialist);
         groupOfSpecialists.add(third_specialist);
@@ -143,48 +126,47 @@ public class SpecialistRepoUnitTest {
     }
 
 
-//Bugfix in SpecialistRepository in method findSpecialistsByProvinceAndCityAndProfessionsIn();
-/*TODO*/
-//    @Test
-//    public void whenFindGroupOfSpecialistsByProvinceAndCityAndProfession_thenReturnSpecialist() {
-//// when
-//        specialistRepo.saveAll(groupOfSpecialists);
-//        Iterable<Specialist> listOfSearchedSpecialists = specialistRepo.findSpecialistsByProvinceAndCityAndProfession(Province.MAZOWIECKIE, "Warszawa",["plumber"]);
-//
-//        ArrayList<Specialist> testList = new ArrayList<>();
-//        for(Specialist specialist : listOfSearchedSpecialists){
-//            if(specialist.getProvince().equals(Province.MAZOWIECKIE)
-//                    && specialist.getCity().equals("Warszawa")
-//                    && specialist.getProfession().equals("plumber")) testList.add(specialist);
-//        }
-//        ArrayList<Specialist> actualList = new ArrayList<>();
-//        for(Specialist specialist : groupOfSpecialists){
-//            if(specialist.getProvince().equals(Province.MAZOWIECKIE)
-//                    && specialist.getCity().equals("Warszawa")
-//                    && specialist.getProfession().equals("plumber")) actualList.add(specialist);
-//        }
-//
-//        // then
-//        /*Province*/
-//        assertThat(testList
-//                .stream()
-//                .map(Specialist::getProvince).collect(Collectors.toList()))
-//                .isEqualTo(actualList
-//                        .stream()
-//                        .map(Specialist::getProvince).collect(Collectors.toList()));
-//        /*City*/
-//        assertThat(testList
-//                .stream()
-//                .map(Specialist::getCity).collect(Collectors.toList()))
-//                .isEqualTo(actualList
-//                        .stream()
-//                        .map(Specialist::getCity).collect(Collectors.toList()));
-//        /*Profession*/
-//        assertThat(testList
-//                .stream()
-//                .map(Specialist::getProfession).collect(Collectors.toList()))
-//                .isEqualTo(actualList
-//                        .stream()
-//                        .map(Specialist::getProfession).collect(Collectors.toList()));
-//    }
+
+    @Test
+    public void whenFindGroupOfSpecialistsByProvinceAndCityAndProfession_thenReturnSpecialist() {
+// when
+        specialistRepo.saveAll(groupOfSpecialists);
+        Iterable<Specialist> listOfSearchedSpecialists = specialistRepo.findSpecialistsByProvinceAndCityAndProfession(Province.MAZOWIECKIE, "Warszawa","plumber");
+
+        ArrayList<Specialist> testList = new ArrayList<>();
+        for(Specialist specialist : listOfSearchedSpecialists){
+            if(specialist.getProvince().equals(Province.MAZOWIECKIE)
+                    && specialist.getCity().equals("Warszawa")
+                    && specialist.getProfession().equals("plumber")) testList.add(specialist);
+        }
+        ArrayList<Specialist> actualList = new ArrayList<>();
+        for(Specialist specialist : groupOfSpecialists){
+            if(specialist.getProvince().equals(Province.MAZOWIECKIE)
+                    && specialist.getCity().equals("Warszawa")
+                    && specialist.getProfession().equals("plumber")) actualList.add(specialist);
+        }
+
+        // then
+        /*Province*/
+        assertThat(testList
+                .stream()
+                .map(Specialist::getProvince).collect(Collectors.toList()))
+                .isEqualTo(actualList
+                        .stream()
+                        .map(Specialist::getProvince).collect(Collectors.toList()));
+        /*City*/
+        assertThat(testList
+                .stream()
+                .map(Specialist::getCity).collect(Collectors.toList()))
+                .isEqualTo(actualList
+                        .stream()
+                        .map(Specialist::getCity).collect(Collectors.toList()));
+        /*Profession*/
+        assertThat(testList
+                .stream()
+                .map(Specialist::getProfession).collect(Collectors.toList()))
+                .isEqualTo(actualList
+                        .stream()
+                        .map(Specialist::getProfession).collect(Collectors.toList()));
+    }
 }

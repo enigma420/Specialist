@@ -46,6 +46,15 @@ public class SpecialistController {
         return new ResponseEntity<>(existingSpecialist,HttpStatus.OK);
     }
 
+    @PostMapping("/rate")
+    public ResponseEntity<?> customerRateSpecialist(@Valid @RequestBody Specialist specialist,Integer rateStars,BindingResult bindingResult){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+        if(errorMap != null) return errorMap;
+
+        Specialist existingSpecialist = specialistServiceImpl.updateSpecialistRate(specialist,rateStars);
+        return new ResponseEntity<>(existingSpecialist,HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete/{specialistId}")
     public ResponseEntity<?> deleteSpecialist(@PathVariable("specialistId") String specialistId){
         specialistServiceImpl.deleteSpecialistBySpecialistId(specialistId);
@@ -84,7 +93,7 @@ public class SpecialistController {
     @GetMapping("/get")
     public ResponseEntity<HashSet<Specialist>> getSpecialistsByProvinceAndCityAndProfession(@RequestParam(value = "province",required = false) Province province,
                                                                             @RequestParam(value = "city",required = false)String city,
-                                                                            @RequestParam(value = "profession", required = false) List<String> profession){
+                                                                            @RequestParam(value = "profession", required = false) String profession){
         HashSet<Specialist> groupOfSpecialists = specialistServiceImpl.findSpecialists(province,city,profession);
         return new ResponseEntity<>(groupOfSpecialists,HttpStatus.OK);
     }

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.specialist.searchexpert.domains.customer.Customer;
+import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.customer.CustomerServiceImpl;
 
@@ -86,4 +87,6 @@ public class CustomerController {
 
         return new ResponseEntity<>(allCustomers,HttpStatus.OK);
     }
+//"Specialist with ID: '" + specialist.getSpecialistId() + "' was rating with " + rateStars + " stars !",
+
 }

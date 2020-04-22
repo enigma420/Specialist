@@ -1,6 +1,7 @@
 package pl.specialist.searchexpert.services.customer;
 
 import pl.specialist.searchexpert.domains.customer.Customer;
+import pl.specialist.searchexpert.domains.specialist.Specialist;
 
 public interface CustomerService {
 
@@ -12,5 +13,4 @@ public interface CustomerService {
     Customer findCustomerByMail(String mail);
     Customer findCustomerByNickname(String nickname);
     Iterable<Customer> findAllCustomers();
-
 }

@@ -1,6 +1,7 @@
 package pl.specialist.searchexpert.domains.customer;
 
 import org.hibernate.annotations.GenericGenerator;
+import pl.specialist.searchexpert.domains.commission.Commission;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 
 import javax.persistence.*;
@@ -36,6 +37,9 @@ public class Customer {
     inverseJoinColumns = @JoinColumn(name = "specialist_id")
     )
     private Set<Specialist> markedSpecialists;
+
+    @OneToMany(mappedBy = "commission")
+    private Set<Commission> commissions;
 
     public Customer() {
     }

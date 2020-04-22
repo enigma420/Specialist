@@ -8,8 +8,6 @@ import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistNot
 import pl.specialist.searchexpert.repositories.SpecialistRepo;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.stream.StreamSupport;
 
 @Service
 public class SpecialistServiceImpl implements SpecialistService{
@@ -34,13 +32,26 @@ public class SpecialistServiceImpl implements SpecialistService{
         else{
             if(!specialist.getSpecialistId().equals(existingSpecialist.getSpecialistId())) throw new SpecialistIdException("Cannot change SpecialistId");
             if(!specialist.getMail().equals(existingSpecialist.getMail())) throw new SpecialistIdException("Cannot change email address");
-            if(!specialist.getStars().equals(existingSpecialist.getStars())) throw new SpecialistIdException("Cannot change stars");
+            if(!specialist.getRateStars().equals(existingSpecialist.getRateStars())) throw new SpecialistIdException("Cannot change stars");
             specialist.setSpecialistId(specialistRepo.findBySpecialistId(specialist.getSpecialistId()).getSpecialistId());
             specialist.setMail(specialistRepo.findByMail(specialist.getMail()).getMail());
-            specialist.setStars(specialistRepo.findBySpecialistId(specialist.getSpecialistId()).getStars());
+            specialist.setRateStars(specialistRepo.findBySpecialistId(specialist.getSpecialistId()).getRateStars());
         }
         return specialistRepo.save(specialist);
     }
+
+    @Override
+    public Specialist updateSpecialistRate(Specialist specialist, Integer stars){
+
+        Specialist existingSpecialist = specialistRepo.findBySpecialistId(specialist.getSpecialistId());
+        if(existingSpecialist == null) throw new SpecialistNotFoundException("Cannot rate specialist with ID: '" + specialist.getSpecialistId() + "' because doesn't exist");
+        else {
+            specialist.setNumberOfRatings(specialist.getNumberOfRatings()+1);
+            specialist.setRateStars((specialist.getRateStars()+stars)/(specialist.getNumberOfRatings()));
+        }
+        return specialistRepo.save(specialist);
+    }
+
     @Override
     public void deleteSpecialistBySpecialistId(String specialistId){
         if(specialistRepo.count() == 0) throw new SpecialistNotFoundException("You cannot delete Specialist because doesn't exist");
@@ -83,8 +94,10 @@ public class SpecialistServiceImpl implements SpecialistService{
     }
 
     @Override
-    public HashSet<Specialist> findSpecialists(Province province, String city, List<String> profession){
+    public HashSet<Specialist> findSpecialists(Province province, String city, String profession){
         if(specialistRepo.count() == 0) throw new SpecialistNotFoundException("Any Specialist isn't exist");
-        return specialistRepo.findSpecialistsByProvinceAndCityAndProfessionsIn(province,city,profession);
+        HashSet<Specialist> groupOfSpecialists = specialistRepo.findSpecialistsByProvinceAndCityAndProfession(province,city,profession);
+        if(groupOfSpecialists.isEmpty()) throw new SpecialistNotFoundException("Any Specialist with this conditions was not found");
+        return groupOfSpecialists;
     }
 }
