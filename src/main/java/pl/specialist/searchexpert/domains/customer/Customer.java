@@ -16,19 +16,19 @@ public class Customer {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    String customerId;
+    private String customerId;
     @NotBlank(message = "Nickname may not be blank")
     @Size(min = 3, max = 20, message = "Name must be between 2 and 32 characters")
-    String nickname;
+    private String nickname;
     @NotBlank(message = "City may not be blank")
     @Size(min = 3, max = 25, message = "City must be between 2 and 32 characters")
-    String city;
+    private String city;
     @NotBlank(message = "Phone Number may not be blank")
     @Pattern(regexp="(^$|[0-9]{9})")
-    String phoneNumber;
+    private String phoneNumber;
     @NotBlank(message = "Email may not be blank")
     @Email
-    String mail;
+    private String mail;
 
     @ManyToMany
     @JoinTable(
@@ -38,7 +38,7 @@ public class Customer {
     )
     private Set<Specialist> markedSpecialists;
 
-    @OneToMany(mappedBy = "commission")
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER,mappedBy = "customer", orphanRemoval = true)
     private Set<Commission> commissions;
 
     public Customer() {
@@ -97,5 +97,21 @@ public class Customer {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public Set<Specialist> getMarkedSpecialists() {
+        return markedSpecialists;
+    }
+
+    public void setMarkedSpecialists(Set<Specialist> markedSpecialists) {
+        this.markedSpecialists = markedSpecialists;
+    }
+
+    public Set<Commission> getCommissions() {
+        return commissions;
+    }
+
+    public void setCommissions(Set<Commission> commissions) {
+        this.commissions = commissions;
     }
 }

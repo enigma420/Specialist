@@ -1,12 +1,10 @@
 package pl.specialist.searchexpert.domains.specialist;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
 import pl.specialist.searchexpert.domains.customer.Customer;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,34 +13,34 @@ public class Specialist {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    String specialistId;
+    private String specialistId;
     @NotBlank(message = "Name may not be blank")
     @Size(min = 3, max = 20, message = "Name must be between 2 and 20 characters")
-    String name;
+    private String name;
     @NotBlank(message = "Surname may not be blank")
     @Size(min = 3, max = 20, message = "Name must be between 2 and 20 characters")
-    String surname;
+    private String surname;
     @NotNull(message = "Province may not be blank")
-    Province province;
+    private Province province;
     @NotBlank(message = "City may not be blank")
     @Size(min = 3, max = 25, message = "City must be between 2 and 25 characters")
-    String city;
+    private String city;
     @NotBlank(message = "profession may not be blank")
     @Size(min = 3, max = 25, message = "Profession must be between 2 and 25 characters")
-    String profession;
+    private String profession;
     @NotBlank(message = "Profession may not be blank")
     @Pattern(regexp="(^$|[0-9]{9})")
-    String phoneNumber;
+    private String phoneNumber;
     @NotBlank(message = "Email may not be blank")
     @Email
-    String mail;
+    private String mail;
     @Min(0)
     @Max(5)
-    Double rateStars = 0.0;
-    Integer numberOfRatings = 0;
+    private Double rateStars = 0.0;
+    private Integer numberOfRatings = 0;
 
     @ManyToMany(mappedBy = "markedSpecialists")
-    Set<Customer> marks;
+    private Set<Customer> marks;
 
     public Specialist() {
     }

@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import pl.specialist.searchexpert.exceptions.commission.exceptions.CommissionIdException;
+import pl.specialist.searchexpert.exceptions.commission.exceptions.CommissionNotFoundException;
+import pl.specialist.searchexpert.exceptions.commission.responses.CommissionIdExceptionResponse;
+import pl.specialist.searchexpert.exceptions.commission.responses.CommissionNotFoundExceptionResponse;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerIdException;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerNotFoundException;
 import pl.specialist.searchexpert.exceptions.customer.responses.CustomerIdExceptionResponse;
@@ -21,6 +25,8 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 @RestController
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+
+    /*Specialist*/
 
     @ExceptionHandler(SpecialistIdException.class)
     public final ResponseEntity<SpecialistIdExceptionResponse> handleSpecialistIdException(SpecialistIdException ex, WebRequest request){
@@ -38,6 +44,8 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
     }
 
+    /*Customer*/
+
     @ExceptionHandler(CustomerIdException.class)
     public final ResponseEntity<CustomerIdExceptionResponse> handleCustomerIdException(CustomerIdException ex, WebRequest request){
         CustomerIdExceptionResponse exceptionResponse = new CustomerIdExceptionResponse(ex.getMessage());
@@ -53,6 +61,24 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         exceptionResponse.setStatus(HttpStatus.NOT_FOUND.value());
         return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
     }
+
+    /*Commission*/
+
+    @ExceptionHandler(CommissionIdException.class)
+    public final ResponseEntity<CommissionIdExceptionResponse> handleCommissionIdException(CommissionIdException ex, WebRequest request){
+        CommissionIdExceptionResponse exceptionResponse = new CommissionIdExceptionResponse(ex.getMessage());
+        exceptionResponse.setTimestamp(LocalDateTime.now());
+        exceptionResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.FORBIDDEN);
+    }
+    @ExceptionHandler(CommissionNotFoundException.class)
+    public final ResponseEntity<CommissionNotFoundExceptionResponse> handleCommissionNotFoundException(CommissionNotFoundException ex, WebRequest request){
+        CommissionNotFoundExceptionResponse exceptionResponse = new CommissionNotFoundExceptionResponse(ex.getMessage());
+        exceptionResponse.setTimestamp(LocalDateTime.now());
+        exceptionResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+    }
+
 
 
 }
