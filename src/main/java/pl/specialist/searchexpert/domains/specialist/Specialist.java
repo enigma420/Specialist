@@ -1,6 +1,7 @@
 package pl.specialist.searchexpert.domains.specialist;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Immutable;
 import pl.specialist.searchexpert.domains.customer.Customer;
 
 import javax.persistence.*;
@@ -39,7 +40,7 @@ public class Specialist {
     private Double rateStars = 0.0;
     private Integer numberOfRatings = 0;
 
-    @ManyToMany(mappedBy = "markedSpecialists")
+    @ManyToMany
     private Set<Customer> marks;
 
     public Specialist() {
@@ -61,25 +62,16 @@ public class Specialist {
         return specialistId;
     }
 
-    public void setSpecialistId(String specialistId) {
-        this.specialistId = specialistId;
-    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
 
     public Province getProvince() {
         return province;
@@ -117,9 +109,9 @@ public class Specialist {
         return mail;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
+//    public void setMail(String mail) {
+//        this.mail = mail;
+//    }
 
     public Double getRateStars() {
         return rateStars;

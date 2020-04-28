@@ -1,13 +1,17 @@
 package pl.specialist.searchexpert.services.specialist;
 
 import org.springframework.stereotype.Service;
+import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
+import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerIdException;
+import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerNotFoundException;
 import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistIdException;
 import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistNotFoundException;
 import pl.specialist.searchexpert.repositories.SpecialistRepo;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class SpecialistServiceImpl implements SpecialistService{
@@ -29,16 +33,21 @@ public class SpecialistServiceImpl implements SpecialistService{
     public Specialist updateSpecialistAccount(Specialist specialist){
         Specialist existingSpecialist = specialistRepo.findByMail(specialist.getMail());
         if(existingSpecialist.getSpecialistId() == null || existingSpecialist.getMail() == null) throw new SpecialistNotFoundException("Cannot Update Specialist with email: '" + specialist.getMail() + "' doesn't exist");
-        else{
-            if(!specialist.getSpecialistId().equals(existingSpecialist.getSpecialistId())) throw new SpecialistIdException("Cannot change SpecialistId");
-            if(!specialist.getMail().equals(existingSpecialist.getMail())) throw new SpecialistIdException("Cannot change email address");
-            if(!specialist.getRateStars().equals(existingSpecialist.getRateStars())) throw new SpecialistIdException("Cannot change stars");
-            specialist.setSpecialistId(specialistRepo.findBySpecialistId(specialist.getSpecialistId()).getSpecialistId());
-            specialist.setMail(specialistRepo.findByMail(specialist.getMail()).getMail());
-            specialist.setRateStars(specialistRepo.findBySpecialistId(specialist.getSpecialistId()).getRateStars());
-        }
         return specialistRepo.save(specialist);
     }
+
+    /*Specialist*/
+    @Override
+    public Specialist markedByCustomer(Specialist specialist, Customer customer){
+
+        Set<Customer> groupOfCustomers = specialist.getMarks();
+        if(!groupOfCustomers.contains(customer)){
+            groupOfCustomers.add(customer);
+            specialist.setMarks(groupOfCustomers);
+        } else throw new SpecialistIdException("you have this customer in your favorites list");
+        return specialistRepo.save(specialist);
+    }
+
 
     @Override
     public Specialist updateSpecialistRate(Specialist specialist, Integer stars){

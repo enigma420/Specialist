@@ -1,11 +1,13 @@
 package pl.specialist.searchexpert.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.specialist.searchexpert.domains.commission.Commission;
 import pl.specialist.searchexpert.domains.customer.Customer;
+import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.commission.CommissionServiceImpl;
 
@@ -22,18 +24,19 @@ public class CommissionController {
 
     private final MapValidationErrorService mapValidationErrorService;
 
+    @Autowired
     public CommissionController(CommissionServiceImpl commissionServiceImpl, MapValidationErrorService mapValidationErrorService) {
         this.commissionServiceImpl = commissionServiceImpl;
         this.mapValidationErrorService = mapValidationErrorService;
     }
 
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addCommission(@Valid @RequestBody Commission commission, Customer customer, BindingResult bindingResult){
+    @PostMapping("/add/{customerNickname}")
+    public ResponseEntity<?> addCommission(@Valid @RequestBody Commission commission, @PathVariable("customerNickname") String nickname, BindingResult bindingResult){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if(errorMap != null) return errorMap;
 
-        Commission newCommission = commissionServiceImpl.createCommission(commission,customer.getNickname());
+        Commission newCommission = commissionServiceImpl.createCommission(commission,nickname);
         return new ResponseEntity<Commission>(newCommission,HttpStatus.CREATED);
     }
 
@@ -71,13 +74,6 @@ public class CommissionController {
         return new ResponseEntity<>(commission,HttpStatus.OK);
     }
 
-    @GetMapping("/getByTitle/{title}")
-    public ResponseEntity<?> getCommissionByTitle(@PathVariable("title") String title){
-
-        Commission commission = commissionServiceImpl.findCommissionByTitle(title);
-
-        return new ResponseEntity<>(commission,HttpStatus.OK);
-    }
     @GetMapping("/getByCity/{city}")
     public ResponseEntity<?> getCommissionsByCity(@PathVariable("city") String city){
 

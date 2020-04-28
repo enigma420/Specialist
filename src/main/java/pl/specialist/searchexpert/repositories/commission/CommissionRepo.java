@@ -1,6 +1,8 @@
 package pl.specialist.searchexpert.repositories.commission;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.specialist.searchexpert.domains.commission.Commission;
 import pl.specialist.searchexpert.domains.customer.Customer;
@@ -25,12 +27,9 @@ public interface CommissionRepo extends JpaRepository<Commission,Long> {
 
     Commission findByCommissionId(String commissionId);
 
-    Commission findByTitle(String title);
+
     HashSet<Commission> findCommissionsByCity(String city);
     HashSet<Commission> findCommissionsByProfession(String profession);
     HashSet<Commission> findCommissionsByCommissionAuthorNickname(String nickname);
-
-
-
 
 }

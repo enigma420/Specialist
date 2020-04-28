@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.repositories.CustomerRepo;
 import pl.specialist.searchexpert.repositories.SpecialistRepo;
+import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,7 @@ public class CustomerServiceImplIntegrationTest {
     static class CustomerServiceImplTestContextConfiguration{
         @Bean
         public CustomerService customerService(){
-            return new CustomerServiceImpl(customerRepo,specialistRepo);
+            return new CustomerServiceImpl(customerRepo,specialistRepo,specialistServiceImpl);
         }
     }
 
@@ -37,6 +38,9 @@ public class CustomerServiceImplIntegrationTest {
 
     @MockBean
     private static SpecialistRepo specialistRepo;
+
+    @MockBean
+    private static SpecialistServiceImpl specialistServiceImpl;
 
     @Before
     public void setUp(){

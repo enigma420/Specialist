@@ -9,12 +9,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+
 @Entity
 @Table(name = "commission")
 public class Commission {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String commissionId;
@@ -30,8 +29,10 @@ public class Commission {
     @NotBlank(message = "Profession may not be blank")
     @Size(min = 3,max = 25,message = "Profession must be between 2 and 25 characters")
     private String profession;
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonIgnore
     private Customer customer;
 
     private String commissionAuthorNickname;
@@ -39,13 +40,6 @@ public class Commission {
     public Commission() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getCommissionId() {
         return commissionId;
