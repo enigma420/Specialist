@@ -8,6 +8,7 @@ import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.customer.CustomerServiceImpl;
+import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
 
 import javax.validation.Valid;
 
@@ -18,10 +19,13 @@ public class CustomerController {
 
     private final CustomerServiceImpl customerServiceImpl;
 
+    private final SpecialistServiceImpl specialistServiceImpl;
+
     private final MapValidationErrorService mapValidationErrorService;
 
-    public CustomerController(CustomerServiceImpl customerServiceImpl, MapValidationErrorService mapValidationErrorService) {
+    public CustomerController(CustomerServiceImpl customerServiceImpl, SpecialistServiceImpl specialistServiceImpl, MapValidationErrorService mapValidationErrorService) {
         this.customerServiceImpl = customerServiceImpl;
+        this.specialistServiceImpl = specialistServiceImpl;
         this.mapValidationErrorService = mapValidationErrorService;
     }
 
@@ -41,6 +45,16 @@ public class CustomerController {
         if(errorMap != null) return errorMap;
 
         Customer existingCustomer = customerServiceImpl.updateCustomerAccount(customer);
+        return new ResponseEntity<>(existingCustomer,HttpStatus.OK);
+    }
+
+    /*Specialist*/
+    @PostMapping("/addSpec/{specialistMail}")
+    public ResponseEntity<?> addSpecialistToFavorite(@Valid @RequestBody Customer customer, @PathVariable("specialistMail") String specialistMail){
+
+
+         Customer existingCustomer = customerServiceImpl.markSpecialistToFavorite(specialistServiceImpl.findSpecialistByMail(specialistMail),customer);
+
         return new ResponseEntity<>(existingCustomer,HttpStatus.OK);
     }
 
@@ -88,5 +102,6 @@ public class CustomerController {
         return new ResponseEntity<>(allCustomers,HttpStatus.OK);
     }
 //"Specialist with ID: '" + specialist.getSpecialistId() + "' was rating with " + rateStars + " stars !",
+
 
 }

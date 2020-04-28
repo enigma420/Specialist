@@ -12,7 +12,6 @@ public interface CommissionService {
     void deleteAllCommissions();
     Iterable<Commission> findAllCommissions(String nickname);
     Commission findCommissionByCommissionId(String commissionId,String username);
-    Commission findCommissionByTitle(String title);
     HashSet<Commission> findCommissionsByCommissionAuthorNickname(String nickname);
     HashSet<Commission> findCommissionsByCity(String city);
     HashSet<Commission> findCommissionsByProfession(String profession);

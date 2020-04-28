@@ -13,4 +13,5 @@ public interface CustomerService {
     Customer findCustomerByMail(String mail);
     Customer findCustomerByNickname(String nickname);
     Iterable<Customer> findAllCustomers();
+    Customer markSpecialistToFavorite(Specialist specialist,Customer customer);
 }

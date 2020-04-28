@@ -1,5 +1,6 @@
 package pl.specialist.searchexpert.services.commission;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.specialist.searchexpert.domains.commission.Commission;
 import pl.specialist.searchexpert.domains.customer.Customer;
@@ -19,6 +20,7 @@ public class CommissionServiceImpl implements CommissionService {
 
     private final CustomerRepo customerRepo;
 
+    @Autowired
     public CommissionServiceImpl(CommissionRepo commissionRepo, CustomerRepo customerRepo) {
         this.commissionRepo = commissionRepo;
         this.customerRepo = customerRepo;
@@ -35,15 +37,13 @@ public class CommissionServiceImpl implements CommissionService {
 //            }
 //        }
         try{
-            Customer customer = customerRepo.findByNickname(nickname);
+        Customer customer = customerRepo.findByNickname(nickname);
             commission.setCustomer(customer);
             commission.setCommissionAuthorNickname(customer.getNickname());
-            commission.setCommissionId(commission.getCommissionId());
 
-            return commissionRepo.save(commission);
+        return commissionRepo.save(commission);
         }catch (Exception e){
             throw new CommissionIdException("Commission with ID '" + commission.getCommissionId() + "' already exist" +
-              " ,id: '"+ commission.getId() +
             "' ,author: '" + commission.getCommissionAuthorNickname() +
             "' ,city: '" + commission.getCity() +
             "' ,customer: '" + commission.getCustomer() +
@@ -96,20 +96,12 @@ public class CommissionServiceImpl implements CommissionService {
         return commission;
     }
 
-    @Override
-    public Commission findCommissionByTitle(String title) {
-        if(commissionRepo.count() == 0) throw new SpecialistNotFoundException("Any Commission isn't exist");
-        Commission commission = commissionRepo.findByTitle(title);
-        if(commission == null) throw new CommissionIdException("Commission with Title: '" + title + "' doesn't exist");
-
-        return commission;
-    }
 
     @Override
     public HashSet<Commission> findCommissionsByProfession(String profession) {
         if(commissionRepo.count() == 0) throw new SpecialistNotFoundException("Any Commission isn't exist");
         HashSet<Commission> setOfCommissions = commissionRepo.findCommissionsByProfession(profession);
-        if(setOfCommissions.size() == 0) throw new CommissionNotFoundException("Any Commission with profession: '" + profession + "' doesn't exist");
+        if(setOfCommissions.size() == 0) throw new CommissionNotFoundException("Any Commissions with profession: '" + profession + "' doesn't exist");
         return setOfCommissions;
     }
 
@@ -117,7 +109,7 @@ public class CommissionServiceImpl implements CommissionService {
     public HashSet<Commission> findCommissionsByCity(String city) {
         if(commissionRepo.count() == 0) throw new SpecialistNotFoundException("Any Commission isn't exist");
         HashSet<Commission> setOfCommissions = commissionRepo.findCommissionsByCity(city);
-        if(setOfCommissions.size() == 0) throw new CommissionNotFoundException("Any Commission with profession: '" + city + "' doesn't exist");
+        if(setOfCommissions.size() == 0) throw new CommissionNotFoundException("Any Commissions with profession: '" + city + "' doesn't exist");
         return setOfCommissions;
     }
 
@@ -127,7 +119,7 @@ public class CommissionServiceImpl implements CommissionService {
         Customer soughtCustomer = customerRepo.findByNickname(nickname);
         if(soughtCustomer == null) throw new CustomerNotFoundException("Customer with nickname: '" + nickname + "' doesn't exist");
         HashSet<Commission> setOfCommissions = commissionRepo.findCommissionsByCommissionAuthorNickname(nickname);
-        if(setOfCommissions.size() == 0) throw new CommissionNotFoundException("Any Commission which create by Customer with nickname: '" + nickname + "' doesn't exist");
+        if(setOfCommissions.size() == 0) throw new CommissionNotFoundException("Any Commissions which create by Customer with nickname: '" + nickname + "' doesn't exist");
         return setOfCommissions;
     }
 }

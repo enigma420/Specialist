@@ -1,5 +1,6 @@
 package pl.specialist.searchexpert.domains.customer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import pl.specialist.searchexpert.domains.commission.Commission;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
@@ -38,8 +39,8 @@ public class Customer {
     )
     private Set<Specialist> markedSpecialists;
 
-    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER,mappedBy = "customer", orphanRemoval = true)
-    private Set<Commission> commissions;
+   @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER,mappedBy = "customer")
+   private Set<Commission> commissions;
 
     public Customer() {
     }
@@ -106,7 +107,7 @@ public class Customer {
     public void setMarkedSpecialists(Set<Specialist> markedSpecialists) {
         this.markedSpecialists = markedSpecialists;
     }
-
+//
     public Set<Commission> getCommissions() {
         return commissions;
     }
