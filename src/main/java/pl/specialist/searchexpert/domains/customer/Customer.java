@@ -3,6 +3,7 @@ package pl.specialist.searchexpert.domains.customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import pl.specialist.searchexpert.domains.commission.Commission;
+import pl.specialist.searchexpert.domains.opinion.Opinion;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 
 import javax.persistence.*;
@@ -32,15 +33,13 @@ public class Customer {
     private String mail;
 
     @ManyToMany
-    @JoinTable(
-    name = "specialists_mark",
-    joinColumns = @JoinColumn(name = "customer_id"),
-    inverseJoinColumns = @JoinColumn(name = "specialist_id")
-    )
     private Set<Specialist> markedSpecialists;
 
    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER,mappedBy = "customer")
    private Set<Commission> commissions;
+
+//    @OneToMany(fetch = FetchType.LAZY,mappedBy = "customer")
+//    private Set<Opinion> opinions;
 
     public Customer() {
     }
@@ -115,4 +114,12 @@ public class Customer {
     public void setCommissions(Set<Commission> commissions) {
         this.commissions = commissions;
     }
+//
+//    public Set<Opinion> getOpinions() {
+//        return opinions;
+//    }
+//
+//    public void setOpinions(Set<Opinion> opinions) {
+//        this.opinions = opinions;
+//    }
 }

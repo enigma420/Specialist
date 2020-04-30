@@ -11,9 +11,11 @@ import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistNot
 import pl.specialist.searchexpert.repositories.CustomerRepo;
 import pl.specialist.searchexpert.repositories.commission.CommissionRepo;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 
 @Service
+@Transactional
 public class CommissionServiceImpl implements CommissionService {
 
     private final CommissionRepo commissionRepo;

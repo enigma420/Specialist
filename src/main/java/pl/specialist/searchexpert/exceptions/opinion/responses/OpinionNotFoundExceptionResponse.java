@@ -1,27 +1,26 @@
-package pl.specialist.searchexpert.exceptions.specialist.responses;
+package pl.specialist.searchexpert.exceptions.opinion.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public class SpecialistNotFoundExceptionResponse {
+public class OpinionNotFoundExceptionResponse  {
 
-    private String specialistNotFound;
+    private String opinionNotFound;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime timestamp;
     private int status;
 
-
-    public SpecialistNotFoundExceptionResponse(String specialistNotFound) {
-        specialistNotFound = specialistNotFound;
+    public OpinionNotFoundExceptionResponse(String opinionNotFound) {
+        this.opinionNotFound = opinionNotFound;
     }
 
-    public String getSpecialistNotFound() {
-        return specialistNotFound;
+    public String getOpinionNotFound() {
+        return opinionNotFound;
     }
 
-    public void setSpecialistNotFound(String specialistNotFound) {
-        specialistNotFound = specialistNotFound;
+    public void setOpinionNotFound(String opinionNotFound) {
+        this.opinionNotFound = opinionNotFound;
     }
 
     public LocalDateTime getTimestamp() {
@@ -39,6 +38,5 @@ public class SpecialistNotFoundExceptionResponse {
     public void setStatus(int status) {
         this.status = status;
     }
+
 }
-
-

@@ -10,10 +10,12 @@ import pl.specialist.searchexpert.repositories.CustomerRepo;
 import pl.specialist.searchexpert.repositories.SpecialistRepo;
 import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
+@Transactional
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepo customerRepo;
@@ -69,13 +71,8 @@ public class CustomerServiceImpl implements CustomerService {
         if(!groupOfSpecialists.contains(specialist)) {
             groupOfSpecialists.add(specialist);
             customer.setMarkedSpecialists(groupOfSpecialists);
-        }
-        Set<Customer> groupOfCustomers = specialist.getMarks();
-        if(!groupOfCustomers.contains(customer)){
-            groupOfCustomers.add(customer);
-            specialistServiceImpl.markedByCustomer(specialist,customer);
-
-        }else throw new CustomerIdException("you have this specialist in your favorites list");
+//            specialistServiceImpl.markedByCustomer(specialist,customer);
+        } else throw new CustomerIdException("you have this specialist in your favorites list");
             return customerRepo.save(customer);
     }
 

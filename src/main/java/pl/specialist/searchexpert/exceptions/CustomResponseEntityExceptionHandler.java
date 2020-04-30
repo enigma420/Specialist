@@ -15,6 +15,10 @@ import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerIdExcep
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerNotFoundException;
 import pl.specialist.searchexpert.exceptions.customer.responses.CustomerIdExceptionResponse;
 import pl.specialist.searchexpert.exceptions.customer.responses.CustomerNotFoundExceptionResponse;
+import pl.specialist.searchexpert.exceptions.opinion.exceptions.OpinionIdException;
+import pl.specialist.searchexpert.exceptions.opinion.exceptions.OpinionNotFoundException;
+import pl.specialist.searchexpert.exceptions.opinion.responses.OpinionIdExceptionResponse;
+import pl.specialist.searchexpert.exceptions.opinion.responses.OpinionNotFoundExceptionResponse;
 import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistIdException;
 import pl.specialist.searchexpert.exceptions.specialist.responses.SpecialistIdExceptionResponse;
 import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistNotFoundException;
@@ -79,6 +83,21 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
     }
 
+    /*Commission*/
 
+    @ExceptionHandler(OpinionIdException.class)
+    public final ResponseEntity<OpinionIdExceptionResponse> handleOpinionIdException(OpinionIdException ex, WebRequest request){
+        OpinionIdExceptionResponse exceptionResponse = new OpinionIdExceptionResponse(ex.getMessage());
+        exceptionResponse.setTimestamp(LocalDateTime.now());
+        exceptionResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.FORBIDDEN);
+    }
+    @ExceptionHandler(OpinionNotFoundException.class)
+    public final ResponseEntity<OpinionNotFoundExceptionResponse> handleOpinionNotFoundException(OpinionNotFoundException ex, WebRequest request){
+        OpinionNotFoundExceptionResponse exceptionResponse = new OpinionNotFoundExceptionResponse(ex.getMessage());
+        exceptionResponse.setTimestamp(LocalDateTime.now());
+        exceptionResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+    }
 
 }
