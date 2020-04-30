@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import pl.specialist.searchexpert.domains.opinion.Opinion;
 import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
@@ -102,6 +103,12 @@ public class SpecialistController {
     public ResponseEntity<Iterable<Specialist>> getAllSpecialists(){
        Iterable<Specialist> allSpecialists = specialistServiceImpl.findAllSpecialists();
         return new ResponseEntity<>(allSpecialists,HttpStatus.OK);
+    }
+
+    @GetMapping("/get/opinions/{specialistId}")
+    public ResponseEntity<HashSet<Opinion>> getAllSpecialistOpinions(@PathVariable("specialistId") String specialistId){
+        HashSet<Opinion> allSpecialistOpinions = specialistServiceImpl.findAllSpecialistOpinionsById(specialistId);
+        return new ResponseEntity<>(allSpecialistOpinions,HttpStatus.OK);
     }
 
 }

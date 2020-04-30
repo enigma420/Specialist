@@ -3,6 +3,7 @@ package pl.specialist.searchexpert.domains.specialist;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Immutable;
 import pl.specialist.searchexpert.domains.customer.Customer;
+import pl.specialist.searchexpert.domains.opinion.Opinion;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -40,8 +41,10 @@ public class Specialist {
     private Double rateStars = 0.0;
     private Integer numberOfRatings = 0;
 
-    @ManyToMany
-    private Set<Customer> marks;
+//
+//    @OneToMany(fetch = FetchType.LAZY,mappedBy = "specialist")
+//    private Set<Opinion> opinions;
+
 
     public Specialist() {
     }
@@ -129,11 +132,12 @@ public class Specialist {
         this.numberOfRatings = numberOfRatings;
     }
 
-    public Set<Customer> getMarks() {
-        return marks;
-    }
 
-    public void setMarks(Set<Customer> marks) {
-        this.marks = marks;
-    }
+//    public Set<Opinion> getOpinions() {
+//        return opinions;
+//    }
+//
+//    public void setOpinions(Set<Opinion> opinions) {
+//        this.opinions = opinions;
+//    }
 }
