@@ -1,35 +1,19 @@
 package pl.specialist.searchexpert.repositories.commission;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.specialist.searchexpert.domains.commission.Commission;
 import pl.specialist.searchexpert.domains.customer.Customer;
 
 import java.util.HashSet;
-import java.util.List;
 
 @Repository
-public interface CommissionRepo extends JpaRepository<Commission,Long> {
+public interface CommissionRepo extends JpaRepository<Commission,String> {
 
-    @Override
-    long count();
-
-    @Override
-    <S extends Commission> S save(S c);
-
-    @Override
-    List<Commission> findAll();
-
-    @Override
-    void delete(Commission commission);
 
     Commission findByCommissionId(String commissionId);
-
-
-    HashSet<Commission> findCommissionsByCity(String city);
-    HashSet<Commission> findCommissionsByProfession(String profession);
-    HashSet<Commission> findCommissionsByCommissionAuthorNickname(String nickname);
+    HashSet<Commission> findByCity(String city);
+    HashSet<Commission> findByProfession(String profession);
+    HashSet<Commission> findByCustomer(Customer customer);
 
 }

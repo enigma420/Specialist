@@ -1,6 +1,8 @@
 package pl.specialist.searchexpert.domains.opinion;
 
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.Range;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 
@@ -12,23 +14,29 @@ import javax.validation.constraints.*;
 public class Opinion {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long opinionId;
-    @NotBlank(message = "Name may not be blank")
-    @Size(min = 3, max = 100, message = "Name must be between 2 and 20 characters")
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "opinion_id",updatable = false)
+    private String opinionId;
+    @NotBlank(message = "Title may not be blank")
+    @Size(min = 3, max = 30, message = "Title '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "title")
     private String title;
-    @NotBlank(message = "Surname may not be blank")
-    @Size(min = 3, max = 255, message = "Name must be between 2 and 20 characters")
+    @NotBlank(message = "Description may not be blank")
+    @Size(min = 3, max = 255, message = "Description '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "description")
     private String description;
-    @NotNull(message = "Province may not be blank")
-    private Integer rate;
+    @NotNull(message = "Rate may not be blank")
+    @Range(min = 0 , max = 5 , message = "Rate '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "rate")
+    private Double rate;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "specialist_id")
     private Specialist specialist;
 
@@ -36,11 +44,11 @@ public class Opinion {
     public Opinion() {
     }
 
-    public Long getOpinionId() {
+    public String getOpinionId() {
         return opinionId;
     }
 
-    public void setOpinionId(Long opinionId) {
+    public void setOpinionId(String opinionId) {
         this.opinionId = opinionId;
     }
 
@@ -60,11 +68,11 @@ public class Opinion {
         this.description = description;
     }
 
-    public Integer getRate() {
+    public Double getRate() {
         return rate;
     }
 
-    public void setRate(Integer rate) {
+    public void setRate(Double rate) {
         this.rate = rate;
     }
 

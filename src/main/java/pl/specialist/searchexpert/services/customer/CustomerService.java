@@ -8,10 +8,9 @@ public interface CustomerService {
     Customer createCustomerAccount(Customer customer);
     Customer updateCustomerAccount(Customer customer);
     void deleteCustomerByCustomerId(String customerId);
-    void deleteAllCustomers();
     Customer findCustomerById(String customerId);
     Customer findCustomerByMail(String mail);
     Customer findCustomerByNickname(String nickname);
     Iterable<Customer> findAllCustomers();
-    Customer markSpecialistToFavorite(Specialist specialist,Customer customer);
+    Customer addSpecialistToFavorite(Specialist specialist,Customer customer);
 }

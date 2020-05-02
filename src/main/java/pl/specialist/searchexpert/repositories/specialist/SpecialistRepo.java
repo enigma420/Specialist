@@ -1,4 +1,4 @@
-package pl.specialist.searchexpert.repositories;
+package pl.specialist.searchexpert.repositories.specialist;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,24 +13,13 @@ import java.util.List;
 @Repository
 public interface SpecialistRepo extends JpaRepository<Specialist,Long> {
 
-    @Override
-    long count();
-
-    @Override
-    <S extends Specialist> S save(S s);
-
-    @Override
-    List<Specialist> findAll();
-
-    @Override
-    void delete(Specialist specialist);
-
     Specialist findBySpecialistId(String id);
     Specialist findByMail(String mail);
+    Specialist findByPhoneNumber(String phoneNumber);
 
     /*Find SPECIALISTS by personal identity*/
     @Query("SELECT c FROM Specialist c WHERE (:name is null or c.name = :name) and (:surname is null or c.surname = :surname)")
-    HashSet<Specialist> findSpecialistsByNameAndSurname(String name,String surname);
+    HashSet<Specialist> findSpecialistsByNameAndSurname(@Param("name")String name,@Param("surname")String surname);
 
     /*Find SPECIALIST by location and profession*/
     @Query("SELECT c FROM Specialist c WHERE (:province is null or c.province = :province) and (:city is null or c.city = :city) and (:profession is null or c.profession = :profession)")

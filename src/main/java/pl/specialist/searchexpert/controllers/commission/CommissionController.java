@@ -1,4 +1,4 @@
-package pl.specialist.searchexpert.controllers;
+package pl.specialist.searchexpert.controllers.commission;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.specialist.searchexpert.domains.commission.Commission;
-import pl.specialist.searchexpert.domains.customer.Customer;
-import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.commission.CommissionServiceImpl;
 
@@ -31,21 +29,21 @@ public class CommissionController {
     }
 
 
-    @PostMapping("/add/{customerNickname}")
-    public ResponseEntity<?> addCommission(@Valid @RequestBody Commission commission, @PathVariable("customerNickname") String nickname, BindingResult bindingResult){
+    @PostMapping("/add/{customerId}")
+    public ResponseEntity<?> addCommission(@Valid @RequestBody Commission commission, @PathVariable("customerId") String customerId, BindingResult bindingResult){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if(errorMap != null) return errorMap;
 
-        Commission newCommission = commissionServiceImpl.createCommission(commission,nickname);
-        return new ResponseEntity<Commission>(newCommission,HttpStatus.CREATED);
+        Commission newCommission = commissionServiceImpl.createCommission(commission,customerId);
+        return new ResponseEntity<>(newCommission,HttpStatus.CREATED);
     }
 
-    @PostMapping("/edit")
-    public ResponseEntity<?> editCommission(@Valid @RequestBody Commission commission, BindingResult bindingResult,String nickname){
+    @PostMapping("/edit/{customerId}")
+    public ResponseEntity<?> editCommission(@Valid @RequestBody Commission commission, BindingResult bindingResult,@PathVariable("customerId") String customerId){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if(errorMap != null) return errorMap;
 
-        Commission existingCommission = commissionServiceImpl.updateCommission(commission,nickname);
+        Commission existingCommission = commissionServiceImpl.updateCommission(commission,customerId);
         return new ResponseEntity<>(existingCommission,HttpStatus.OK);
     }
 
@@ -55,15 +53,9 @@ public class CommissionController {
         return new ResponseEntity<>("Commission with ID: '" + commissionId + "' was deleted" , HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteAll")
-    public ResponseEntity<?> deleteAllCommissions(){
-        commissionServiceImpl.deleteAllCommissions();
-        return new ResponseEntity<>("All Customers was deleted", HttpStatus.OK);
-    }
-
-    @GetMapping("/getAll")
-    public ResponseEntity<?> getAllCommissions(String nickname){
-        Iterable<Commission> allCommissions = commissionServiceImpl.findAllCommissions(nickname);
+    @GetMapping("/getAll/{customerId}")
+    public ResponseEntity<?> getAllCommissions(@PathVariable("customerId") String customerId){
+        Iterable<Commission> allCommissions = commissionServiceImpl.findAllCustomerCommissions(customerId);
         return new ResponseEntity<>(allCommissions,HttpStatus.OK);
     }
 
@@ -88,14 +80,6 @@ public class CommissionController {
         HashSet<Commission> listOfCommissions = commissionServiceImpl.findCommissionsByProfession(profession);
 
         return new ResponseEntity<>(listOfCommissions,HttpStatus.OK);
-    }
-
-    @GetMapping("/getByCustomerNickname/{nickname}")
-    public ResponseEntity<?> getCommissionsByCustomerNickname(@PathVariable("nickname") String nickname){
-
-        HashSet<Commission> listOfCustomerCommissions = commissionServiceImpl.findCommissionsByCommissionAuthorNickname(nickname);
-
-        return new ResponseEntity<>(listOfCustomerCommissions,HttpStatus.OK);
     }
 
 }

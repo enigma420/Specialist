@@ -7,14 +7,11 @@ import java.util.HashSet;
 
 public interface OpinionService {
 
-    Opinion createOpinion(Opinion opinion, String customerNickname, String specialistId);
-    Opinion updateOpinion(Opinion opinion, String customerNickname, String specialistId);
-    void deleteOpinionByOpinionId(Long opinionId,String customerNickname);
-    void deleteAllSpecialistOpinions(String specialistId);
-    void deleteAllOpinions();
+    Opinion createOpinion(Opinion opinion, String customerId, String specialistId);
+    Opinion updateOpinion(Opinion opinion, String customerId, String specialistId);
+    void deleteOpinionByOpinionId(String opinionId,String customerNickname);
     Iterable<Opinion> findAllSpecialistOpinions(String specialistId);
-    Iterable<Opinion> findAllOpinions();
     Opinion findConcreteCustomerOpinionToConcreteSpecialist(String customerId, String specialistId);
-    HashSet<Opinion> findAllOpinionsByOneCustomer(String customerNickname);
+    HashSet<Opinion> findAllCustomerOpinions(String customerNickname);
 
 }

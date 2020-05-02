@@ -16,26 +16,29 @@ public class Commission {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "commission_id",updatable = false)
     private String commissionId;
-    @NotBlank(message = "title may not be blank")
-    @Size(min = 5, max = 60 , message = "Title must be between 5 and 60 characters")
+    @NotBlank(message = "Title may not be blank")
+    @Size(min = 5, max = 60 , message = "Title '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "title")
     private String title;
-    @NotBlank(message = "description may not be blank")
-    @Size(min = 5, max = 256 , message = "Title must be between 5 and 256 characters")
+    @NotBlank(message = "Description may not be blank")
+    @Size(min = 5, max = 250 , message = "Description '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "description")
     private String description;
     @NotBlank(message = "City may not be blank")
-    @Size(min = 3, max = 25, message = "City must be between 2 and 25 characters")
+    @Size(min = 3, max = 25, message = "City '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "city")
     private String city;
     @NotBlank(message = "Profession may not be blank")
-    @Size(min = 3,max = 25,message = "Profession must be between 2 and 25 characters")
+    @Size(min = 3,max = 25, message = "Profession '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "profession")
     private String profession;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnore
     private Customer customer;
-
-    private String commissionAuthorNickname;
 
     public Commission() {
     }
@@ -55,14 +58,6 @@ public class Commission {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    public String getCommissionAuthorNickname() {
-        return commissionAuthorNickname;
-    }
-
-    public void setCommissionAuthorNickname(String commissionAuthorNickname) {
-        this.commissionAuthorNickname = commissionAuthorNickname;
     }
 
     public String getTitle() {

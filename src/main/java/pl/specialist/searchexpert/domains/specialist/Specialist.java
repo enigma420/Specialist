@@ -2,12 +2,14 @@ package pl.specialist.searchexpert.domains.specialist;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Immutable;
+import org.hibernate.validator.constraints.Range;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.opinion.Opinion;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Queue;
 
 @Entity
 @Table(name = "specialist")
@@ -15,41 +17,49 @@ public class Specialist {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "specialist_id",updatable = false)
     private String specialistId;
     @NotBlank(message = "Name may not be blank")
-    @Size(min = 3, max = 20, message = "Name must be between 2 and 20 characters")
+    @Size(min = 3, max = 20, message = "Name '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "name",updatable = false)
     private String name;
     @NotBlank(message = "Surname may not be blank")
-    @Size(min = 3, max = 20, message = "Name must be between 2 and 20 characters")
+    @Size(min = 3, max = 20, message = "Name '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "surname",updatable = false)
     private String surname;
     @NotNull(message = "Province may not be blank")
+    @Column(name = "province")
     private Province province;
     @NotBlank(message = "City may not be blank")
-    @Size(min = 3, max = 25, message = "City must be between 2 and 25 characters")
+    @Size(min = 3, max = 25, message = "City '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "city")
     private String city;
-    @NotBlank(message = "profession may not be blank")
-    @Size(min = 3, max = 25, message = "Profession must be between 2 and 25 characters")
-    private String profession;
     @NotBlank(message = "Profession may not be blank")
+    @Size(min = 3, max = 25, message = "Profession '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "profession")
+    private String profession;
+    @NotBlank(message = "Phone Number may not be blank")
     @Pattern(regexp="(^$|[0-9]{9})")
+    @Column(name = "phone_number",updatable = false)
     private String phoneNumber;
     @NotBlank(message = "Email may not be blank")
     @Email
+    @Column(name = "mail",updatable = false)
     private String mail;
-    @Min(0)
-    @Max(5)
-    private Double rateStars = 0.0;
-    private Integer numberOfRatings = 0;
-
-//
-//    @OneToMany(fetch = FetchType.LAZY,mappedBy = "specialist")
-//    private Set<Opinion> opinions;
-
+    @NotBlank(message = "Password may not be blank")
+    @Size(min = 5 , max = 30, message = "Password '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "password")
+    private String password;
+    @Column(name = "rate")
+    private HashMap<String,Double> rateStars;
+    @Range(min = 0 , max = 5)
+    @Column(name = "average_rate")
+    private Double averageRate;
 
     public Specialist() {
     }
 
-    public Specialist(String name,String surname,Province province, String city, String profession, String phoneNumber,String mail,Double rateStars,Integer numberOfRatings) {
+    public Specialist(String name,String surname,Province province, String city, String profession, String phoneNumber,String mail,HashMap<String,Double> rateStars,Double  averageRate) {
         this.name = name;
         this.surname = surname;
         this.province = province;
@@ -58,23 +68,20 @@ public class Specialist {
         this.phoneNumber = phoneNumber;
         this.mail = mail;
         this.rateStars = rateStars;
-        this.numberOfRatings = numberOfRatings;
+        this.averageRate = averageRate;
     }
 
     public String getSpecialistId() {
         return specialistId;
     }
 
-
     public String getName() {
         return name;
     }
 
-
     public String getSurname() {
         return surname;
     }
-
 
     public Province getProvince() {
         return province;
@@ -112,32 +119,27 @@ public class Specialist {
         return mail;
     }
 
-//    public void setMail(String mail) {
-//        this.mail = mail;
-//    }
-
-    public Double getRateStars() {
+    public HashMap<String, Double> getRateStars() {
         return rateStars;
     }
 
-    public void setRateStars(Double rateStars) {
+    public void setRateStars(HashMap<String, Double> rateStars) {
         this.rateStars = rateStars;
     }
 
-    public Integer getNumberOfRatings() {
-        return numberOfRatings;
+    public String getPassword() {
+        return password;
     }
 
-    public void setNumberOfRatings(Integer numberOfRatings) {
-        this.numberOfRatings = numberOfRatings;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
+    public Double getAverageRate() {
+        return averageRate;
+    }
 
-//    public Set<Opinion> getOpinions() {
-//        return opinions;
-//    }
-//
-//    public void setOpinions(Set<Opinion> opinions) {
-//        this.opinions = opinions;
-//    }
+    public void setAverageRate(Double averageRate) {
+        this.averageRate = averageRate;
+    }
 }
