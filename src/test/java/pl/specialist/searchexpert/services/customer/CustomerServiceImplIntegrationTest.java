@@ -2,9 +2,7 @@ package pl.specialist.searchexpert.services.customer;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -12,12 +10,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.specialist.searchexpert.domains.customer.Customer;
-import pl.specialist.searchexpert.repositories.CustomerRepo;
-import pl.specialist.searchexpert.repositories.SpecialistRepo;
+import pl.specialist.searchexpert.repositories.customer.CustomerRepo;
+import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
 import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 public class CustomerServiceImplIntegrationTest {
@@ -26,7 +23,7 @@ public class CustomerServiceImplIntegrationTest {
     static class CustomerServiceImplTestContextConfiguration{
         @Bean
         public CustomerService customerService(){
-            return new CustomerServiceImpl(customerRepo,specialistRepo,specialistServiceImpl);
+            return new CustomerServiceImpl(customerRepo,specialistRepo);
         }
     }
 
@@ -38,9 +35,6 @@ public class CustomerServiceImplIntegrationTest {
 
     @MockBean
     private static SpecialistRepo specialistRepo;
-
-    @MockBean
-    private static SpecialistServiceImpl specialistServiceImpl;
 
     @Before
     public void setUp(){

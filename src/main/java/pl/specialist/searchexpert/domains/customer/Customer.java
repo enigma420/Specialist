@@ -1,9 +1,9 @@
 package pl.specialist.searchexpert.domains.customer;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+import pl.specialist.searchexpert.domains.UniqueMail;
+import pl.specialist.searchexpert.domains.UniqueNickname;
 import pl.specialist.searchexpert.domains.commission.Commission;
-import pl.specialist.searchexpert.domains.opinion.Opinion;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 
 import javax.persistence.*;
@@ -18,28 +18,36 @@ public class Customer {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "customer_id",updatable = false)
     private String customerId;
     @NotBlank(message = "Nickname may not be blank")
-    @Size(min = 3, max = 20, message = "Name must be between 2 and 32 characters")
+    @Size(min = 3, max = 20, message = "Nickname '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "nickname",updatable = false)
+//    @UniqueNickname
     private String nickname;
     @NotBlank(message = "City may not be blank")
-    @Size(min = 3, max = 25, message = "City must be between 2 and 32 characters")
+    @Size(min = 3, max = 25, message = "City '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "city")
     private String city;
     @NotBlank(message = "Phone Number may not be blank")
     @Pattern(regexp="(^$|[0-9]{9})")
+    @Column(name = "phone_number",updatable = false)
     private String phoneNumber;
     @NotBlank(message = "Email may not be blank")
     @Email
+    @Column(name = "mail",updatable = false)
+//    @UniqueMail
     private String mail;
+    @NotBlank(message = "Password may not be blank")
+    @Size(min = 5 , max = 30, message = "Password '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Column(name = "password")
+    private String password;
 
     @ManyToMany
     private Set<Specialist> markedSpecialists;
 
-   @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER,mappedBy = "customer")
-   private Set<Commission> commissions;
-
-//    @OneToMany(fetch = FetchType.LAZY,mappedBy = "customer")
-//    private Set<Opinion> opinions;
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY,mappedBy = "customer")
+    private Set<Commission> commissions;
 
     public Customer() {
     }
@@ -114,12 +122,12 @@ public class Customer {
     public void setCommissions(Set<Commission> commissions) {
         this.commissions = commissions;
     }
-//
-//    public Set<Opinion> getOpinions() {
-//        return opinions;
-//    }
-//
-//    public void setOpinions(Set<Opinion> opinions) {
-//        this.opinions = opinions;
-//    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

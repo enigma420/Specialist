@@ -1,11 +1,10 @@
-package pl.specialist.searchexpert.controllers;
+package pl.specialist.searchexpert.controllers.customer;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.specialist.searchexpert.domains.customer.Customer;
-import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.customer.CustomerServiceImpl;
 import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
@@ -49,11 +48,11 @@ public class CustomerController {
     }
 
     /*Specialist*/
-    @PostMapping("/addSpec/{specialistMail}")
-    public ResponseEntity<?> addSpecialistToFavorite(@Valid @RequestBody Customer customer, @PathVariable("specialistMail") String specialistMail){
+    @PostMapping("/addSpec/{specialistId}")
+    public ResponseEntity<?> addSpecialistToFavorite(@Valid @RequestBody Customer customer, @PathVariable("specialistId") String specialistId){
 
 
-         Customer existingCustomer = customerServiceImpl.markSpecialistToFavorite(specialistServiceImpl.findSpecialistByMail(specialistMail),customer);
+         Customer existingCustomer = customerServiceImpl.addSpecialistToFavorite(specialistServiceImpl.findSpecialistById(specialistId),customer);
 
         return new ResponseEntity<>(existingCustomer,HttpStatus.OK);
     }
@@ -64,11 +63,6 @@ public class CustomerController {
         return new ResponseEntity<>("Customer with ID: '" + customerId + "' was deleted",HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteAll")
-    public ResponseEntity<?> deleteAllCustomers(){
-        customerServiceImpl.deleteAllCustomers();
-        return new ResponseEntity<>("All Customers was deleted",HttpStatus.OK);
-    }
 
     @GetMapping("/getById/{customerId}")
     public ResponseEntity<?> getCustomerById(@PathVariable("customerId") String customerId){
@@ -101,7 +95,6 @@ public class CustomerController {
 
         return new ResponseEntity<>(allCustomers,HttpStatus.OK);
     }
-//"Specialist with ID: '" + specialist.getSpecialistId() + "' was rating with " + rateStars + " stars !",
 
 
 }

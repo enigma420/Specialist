@@ -1,4 +1,4 @@
-package pl.specialist.searchexpert.controllers;
+package pl.specialist.searchexpert.controllers.specialist;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,6 @@ import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
 
 import javax.validation.Valid;
 import java.util.HashSet;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/specialist")
@@ -47,25 +46,10 @@ public class SpecialistController {
         return new ResponseEntity<>(existingSpecialist,HttpStatus.OK);
     }
 
-    @PostMapping("/rate")
-    public ResponseEntity<?> customerRateSpecialist(@Valid @RequestBody Specialist specialist,Integer rateStars,BindingResult bindingResult){
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if(errorMap != null) return errorMap;
-
-        Specialist existingSpecialist = specialistServiceImpl.updateSpecialistRate(specialist,rateStars);
-        return new ResponseEntity<>(existingSpecialist,HttpStatus.OK);
-    }
-
     @DeleteMapping("/delete/{specialistId}")
     public ResponseEntity<?> deleteSpecialist(@PathVariable("specialistId") String specialistId){
         specialistServiceImpl.deleteSpecialistBySpecialistId(specialistId);
         return new ResponseEntity<>("Specialist with ID: '" + specialistId + "' was deleted",HttpStatus.OK);
-    }
-
-    @DeleteMapping("/deleteAll")
-    public ResponseEntity<?> deleteAllSpecialists(){
-        specialistServiceImpl.deleteAllSpecialists();
-        return new ResponseEntity<>("All Specialists was deleted",HttpStatus.OK);
     }
 
     @GetMapping("/getById/{specialistId}")
@@ -95,7 +79,7 @@ public class SpecialistController {
     public ResponseEntity<HashSet<Specialist>> getSpecialistsByProvinceAndCityAndProfession(@RequestParam(value = "province",required = false) Province province,
                                                                             @RequestParam(value = "city",required = false)String city,
                                                                             @RequestParam(value = "profession", required = false) String profession){
-        HashSet<Specialist> groupOfSpecialists = specialistServiceImpl.findSpecialists(province,city,profession);
+        HashSet<Specialist> groupOfSpecialists = specialistServiceImpl.findSpecialistsByProfessionAndLocation(province,city,profession);
         return new ResponseEntity<>(groupOfSpecialists,HttpStatus.OK);
     }
 
