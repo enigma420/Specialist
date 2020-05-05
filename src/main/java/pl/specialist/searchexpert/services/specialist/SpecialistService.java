@@ -9,7 +9,6 @@ import java.util.HashSet;
 
 public interface SpecialistService {
 
-    Specialist createSpecialistAccount(Specialist specialist);
     Specialist updateSpecialistAccount(Specialist specialist);
     void deleteSpecialistBySpecialistId(String specialistId);
     Specialist findSpecialistById(String specialistId);

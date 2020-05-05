@@ -3,17 +3,20 @@ package pl.specialist.searchexpert.domains.specialist;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.opinion.Opinion;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.HashMap;
-import java.util.Queue;
+import java.util.*;
 
 @Entity
 @Table(name = "specialist")
-public class Specialist {
+public class Specialist implements UserDetails {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -46,10 +49,14 @@ public class Specialist {
     @Email
     @Column(name = "mail",updatable = false)
     private String mail;
+    @Transient
+    private String confirmMail;
     @NotBlank(message = "Password may not be blank")
-    @Size(min = 5 , max = 30, message = "Password '${validatedValue}' isn't correct => must be between {min} and {max} characters")
+    @Size(min = 5 , message = "Password '${validatedValue}' isn't correct => must be between {min} characters")
     @Column(name = "password")
     private String password;
+    @Transient
+    private String confirmPassword;
     @Column(name = "rate")
     private HashMap<String,Double> rateStars;
     @Range(min = 0 , max = 5)
@@ -69,6 +76,35 @@ public class Specialist {
         this.mail = mail;
         this.rateStars = rateStars;
         this.averageRate = averageRate;
+    }
+
+
+    public Specialist(String name,String surname,Province province, String city, String profession, String phoneNumber,String mail,String password) {
+        this.name = name;
+        this.surname = surname;
+        this.province = province;
+        this.city = city;
+        this.profession = profession;
+        this.phoneNumber = phoneNumber;
+        this.mail = mail;
+        this.password = password;
+    }
+
+
+    public String getConfirmMail() {
+        return confirmMail;
+    }
+
+    public void setConfirmMail(String confirmMail) {
+        this.confirmMail = confirmMail;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getSpecialistId() {
@@ -135,11 +171,43 @@ public class Specialist {
         this.password = password;
     }
 
+
     public Double getAverageRate() {
         return averageRate;
     }
 
     public void setAverageRate(Double averageRate) {
         this.averageRate = averageRate;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("SPECIALIST"));
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return mail;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

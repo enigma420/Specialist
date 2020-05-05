@@ -13,6 +13,9 @@ import java.util.List;
 @Repository
 public interface SpecialistRepo extends JpaRepository<Specialist,Long> {
 
+    boolean existsByMail(String mail);
+    boolean existsByPhoneNumber(String phoneNumber);
+
     Specialist findBySpecialistId(String id);
     Specialist findByMail(String mail);
     Specialist findByPhoneNumber(String phoneNumber);
