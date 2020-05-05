@@ -1,5 +1,6 @@
 package pl.specialist.searchexpert.domains.specialist;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.Range;
@@ -63,7 +64,11 @@ public class Specialist implements UserDetails {
     @Column(name = "average_rate")
     private Double averageRate;
 
+
+
     private boolean isEnabledToUse;
+
+
 
     public Specialist() {
     }

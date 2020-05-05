@@ -1,5 +1,6 @@
 package pl.specialist.searchexpert.domains.customer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -50,6 +51,7 @@ public class Customer implements UserDetails {
 
     @ManyToMany
     private Set<Specialist> markedSpecialists;
+
 
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY,mappedBy = "customer")
     private Set<Commission> commissions;

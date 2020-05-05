@@ -35,18 +35,9 @@ public class AuthController {
 
     private AuthServiceImpl authServiceImpl;
 
-    private SpecialistRepo specialistRepo;
-
-    private SpecialistConfirmationTokenRepo specialistConfirmationTokenRepo;
-
-    private EmailSenderService emailSenderService;
-
-    public AuthController(MapValidationErrorService mapValidationErrorService, AuthServiceImpl authServiceImpl, SpecialistRepo specialistRepo, SpecialistConfirmationTokenRepo specialistConfirmationTokenRepo, EmailSenderService emailSenderService) {
+    public AuthController(MapValidationErrorService mapValidationErrorService, AuthServiceImpl authServiceImpl) {
         this.mapValidationErrorService = mapValidationErrorService;
         this.authServiceImpl = authServiceImpl;
-        this.specialistRepo = specialistRepo;
-        this.specialistConfirmationTokenRepo = specialistConfirmationTokenRepo;
-        this.emailSenderService = emailSenderService;
     }
 
     @PostMapping("/login")

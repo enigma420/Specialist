@@ -5,6 +5,7 @@ import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerIdException;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerNotFoundException;
+import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistIdException;
 import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistNotFoundException;
 import pl.specialist.searchexpert.repositories.customer.CustomerRepo;
 import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
@@ -43,8 +44,11 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     public boolean checkMarkedSpecialistsSet(Set<Specialist> groupOfSpecialists , String specialistId){
-        for(Specialist spec : groupOfSpecialists){
-            if(spec.getSpecialistId().equals(specialistId)) return false;
+        if(groupOfSpecialists.isEmpty()) return true;
+        else{
+            for(Specialist spec : groupOfSpecialists){
+                if(spec.getSpecialistId().equals(specialistId)) return false;
+            }
         }
         return true;
     }
@@ -52,13 +56,10 @@ public class CustomerServiceImpl implements CustomerService {
     /*Specialist*/
     @Override
     public Customer addSpecialistToFavorite(Specialist specialist,Customer customer){
-        if (specialistRepo.count() == 0) throw new SpecialistNotFoundException("Any Specialist isn't exist");
-        HashSet<Specialist> newSpecialist = new HashSet<>();
-        newSpecialist.add(specialist);
+        if(specialistRepo.count() == 0) throw new SpecialistNotFoundException("Any Specialist isn't exist");
         if(checkMarkedSpecialistsSet(customer.getMarkedSpecialists(),specialist.getSpecialistId())) {
-            Set<Specialist> groupOfSpecialists = customer.getMarkedSpecialists();
-            groupOfSpecialists.addAll(newSpecialist);
-            customer.setMarkedSpecialists(groupOfSpecialists);
+            customer.getMarkedSpecialists().add(specialist);
+            customer.setMarkedSpecialists(customer.getMarkedSpecialists());
         } else throw new CustomerIdException("you have this specialist in your favorite list");
         return customerRepo.save(customer);
     }
