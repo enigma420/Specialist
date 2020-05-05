@@ -1,6 +1,5 @@
 package pl.specialist.searchexpert.services.opinion;
 
-import pl.specialist.searchexpert.domains.commission.Commission;
 import pl.specialist.searchexpert.domains.opinion.Opinion;
 
 import java.util.HashSet;
