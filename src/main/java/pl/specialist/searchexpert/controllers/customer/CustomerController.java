@@ -28,15 +28,15 @@ public class CustomerController {
         this.mapValidationErrorService = mapValidationErrorService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createCustomerAccount(@Valid @RequestBody Customer customer, BindingResult bindingResult){
-
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if(errorMap != null) return errorMap;
-
-        Customer newCustomer = customerServiceImpl.createCustomerAccount(customer);
-        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<?> createCustomerAccount(@Valid @RequestBody Customer customer, BindingResult bindingResult){
+//
+//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+//        if(errorMap != null) return errorMap;
+//
+//        Customer newCustomer = customerServiceImpl.createCustomerAccount(customer);
+//        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
+//    }
 
     @PostMapping("/update")
     public ResponseEntity<?> updateCustomerAccount(@Valid @RequestBody Customer customer, BindingResult bindingResult){

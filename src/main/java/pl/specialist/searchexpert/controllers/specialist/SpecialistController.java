@@ -27,15 +27,15 @@ public class SpecialistController {
         this.mapValidationErrorService = mapValidationErrorService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createSpecialistAccount(@Valid @RequestBody Specialist specialist, BindingResult bindingResult){
-
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if(errorMap != null) return errorMap;
-
-        Specialist newSpecialist = specialistServiceImpl.createSpecialistAccount(specialist);
-        return new ResponseEntity<>(newSpecialist, HttpStatus.CREATED);
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<?> createSpecialistAccount(@Valid @RequestBody Specialist specialist, BindingResult bindingResult){
+//
+//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+//        if(errorMap != null) return errorMap;
+//
+//        Specialist newSpecialist = specialistServiceImpl.createSpecialistAccount(specialist);
+//        return new ResponseEntity<>(newSpecialist, HttpStatus.CREATED);
+//    }
 
     @PostMapping("/update")
     public ResponseEntity<?> updateSpecialistAccount(@Valid @RequestBody Specialist specialist, BindingResult bindingResult){
