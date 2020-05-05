@@ -1,15 +1,21 @@
 package pl.specialist.searchexpert.controllers.auth;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pl.specialist.searchexpert.domains.SpecialistConfirmationToken;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.payload.login.JWTLoginSuccessResponse;
 import pl.specialist.searchexpert.payload.login.LoginRequest;
 import pl.specialist.searchexpert.payload.register.ApiResponse;
+import pl.specialist.searchexpert.repositories.SpecialistConfirmationTokenRepo;
+import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
+import pl.specialist.searchexpert.services.EmailSenderService;
 import pl.specialist.searchexpert.services.auth.AuthServiceImpl;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 
@@ -29,9 +35,18 @@ public class AuthController {
 
     private AuthServiceImpl authServiceImpl;
 
-    public AuthController(MapValidationErrorService mapValidationErrorService, AuthServiceImpl authServiceImpl) {
+    private SpecialistRepo specialistRepo;
+
+    private SpecialistConfirmationTokenRepo specialistConfirmationTokenRepo;
+
+    private EmailSenderService emailSenderService;
+
+    public AuthController(MapValidationErrorService mapValidationErrorService, AuthServiceImpl authServiceImpl, SpecialistRepo specialistRepo, SpecialistConfirmationTokenRepo specialistConfirmationTokenRepo, EmailSenderService emailSenderService) {
         this.mapValidationErrorService = mapValidationErrorService;
         this.authServiceImpl = authServiceImpl;
+        this.specialistRepo = specialistRepo;
+        this.specialistConfirmationTokenRepo = specialistConfirmationTokenRepo;
+        this.emailSenderService = emailSenderService;
     }
 
     @PostMapping("/login")
@@ -56,7 +71,16 @@ public class AuthController {
                 .fromCurrentContextPath().path("/api/auth/")
                 .buildAndExpand(cust.getMail()).toUri();
 
-        return ResponseEntity.created(location).body(new ApiResponse(true,"Customer Registered Successfully"));
+        return ResponseEntity.created(location).body(new ApiResponse(true,"Confirm token from Mail now"));
+
+    }
+
+    @PostMapping("/register/customer/confirm")
+    public ResponseEntity<?> registerCustomerConfirmation(@RequestParam("token") String confirmationToken){
+
+        authServiceImpl.confirmCustomerAccount(confirmationToken);
+
+        return ResponseEntity.ok("Specialist Register Successfully");
 
     }
 
@@ -71,8 +95,18 @@ public class AuthController {
                 .fromCurrentContextPath().path("/api/auth/")
                 .buildAndExpand(spec.getMail()).toUri();
 
-        return ResponseEntity.created(location).body(new ApiResponse(true,"Specialist Registered Successfully"));
+        return ResponseEntity.created(location).body(new ApiResponse(true,"Confirm token from Mail now"));
 
     }
+
+    @PostMapping("/register/specialist/confirm")
+    public ResponseEntity<?> registerSpecialistConfirmation(@RequestParam("token") String confirmationToken){
+
+        authServiceImpl.confirmSpecialistAccount(confirmationToken);
+
+        return ResponseEntity.ok("Specialist Register Successfully");
+
+    }
+
 
 }

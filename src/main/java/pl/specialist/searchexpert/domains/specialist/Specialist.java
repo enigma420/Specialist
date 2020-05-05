@@ -63,6 +63,8 @@ public class Specialist implements UserDetails {
     @Column(name = "average_rate")
     private Double averageRate;
 
+    private boolean isEnabledToUse;
+
     public Specialist() {
     }
 
@@ -90,6 +92,13 @@ public class Specialist implements UserDetails {
         this.password = password;
     }
 
+    public boolean isEnabledToUse() {
+        return isEnabledToUse;
+    }
+
+    public void setEnabledToUse(boolean enabledToUse) {
+        isEnabledToUse = enabledToUse;
+    }
 
     public String getConfirmMail() {
         return confirmMail;

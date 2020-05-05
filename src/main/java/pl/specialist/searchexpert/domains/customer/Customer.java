@@ -46,6 +46,8 @@ public class Customer implements UserDetails {
     @Transient
     private String confirmPassword;
 
+    private boolean isEnabledToUse;
+
     @ManyToMany
     private Set<Specialist> markedSpecialists;
 
@@ -68,6 +70,14 @@ public class Customer implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.mail = mail;
         this.password = password;
+    }
+
+    public boolean isEnabledToUse() {
+        return isEnabledToUse;
+    }
+
+    public void setEnabledToUse(boolean enabledToUse) {
+        isEnabledToUse = enabledToUse;
     }
 
     public String getCustomerId() {
