@@ -74,9 +74,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js"
                 ).permitAll()
-                .antMatchers("/api/auth/login").permitAll()
-                .antMatchers("/api/specialist/getAll").access("hasAuthority('SPECIALIST')")
-                .antMatchers("/api/customer/getAll").permitAll()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/specialist/**").permitAll()
+                .antMatchers("/api/customer/**").permitAll()
+                .antMatchers("/api/opinion/**").permitAll()
+                .antMatchers("/api/commission/**").permitAll()
                 .antMatchers(SIGN_UP_URLS).permitAll()
                 .anyRequest().authenticated();
 

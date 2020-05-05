@@ -1,7 +1,5 @@
 package pl.specialist.searchexpert.services.auth;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,6 +40,7 @@ public class AuthServiceImpl implements AuthService{
     private final EmailSenderService emailSenderService;
 
     private final SpecialistConfirmationTokenRepo specialistConfirmationTokenRepo;
+
     private final CustomerConfirmationTokenRepo customerConfirmationTokenRepo;
 
 
@@ -103,16 +102,6 @@ public class AuthServiceImpl implements AuthService{
         return customer;
     }
 
-    public void confirmCustomerAccount(String confirmationToken){
-        CustomerConfirmationToken token = customerConfirmationTokenRepo.findByConfirmationToken(confirmationToken);
-
-        if(token != null){
-            Customer customer = customerRepo.findByMail(token.getCustomer().getMail());
-            customer.setEnabledToUse(true);
-            customerRepo.save(customer);
-        }else throw new InvalidConfirmTokenException("This confirm token is wrong !");
-    }
-
     @Override
     public Specialist registerSpecialistAccount(Specialist spec){
         if(specialistRepo.existsByMail(spec.getMail())) throw new AlreadyExistUserFieldException("Already exist Specialist with this mail !");
@@ -139,6 +128,16 @@ public class AuthServiceImpl implements AuthService{
         }
 
         return specialist;
+    }
+
+    public void confirmCustomerAccount(String confirmationToken){
+        CustomerConfirmationToken token = customerConfirmationTokenRepo.findByConfirmationToken(confirmationToken);
+
+        if(token != null){
+            Customer customer = customerRepo.findByMail(token.getCustomer().getMail());
+            customer.setEnabledToUse(true);
+            customerRepo.save(customer);
+        }else throw new InvalidConfirmTokenException("This confirm token is wrong !");
     }
 
     public void confirmSpecialistAccount(String confirmationToken){

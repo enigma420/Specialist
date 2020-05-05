@@ -49,8 +49,9 @@ public class CustomerController {
 
     /*Specialist*/
     @PostMapping("/addSpec/{specialistId}")
-    public ResponseEntity<?> addSpecialistToFavorite(@Valid @RequestBody Customer customer, @PathVariable("specialistId") String specialistId){
-
+    public ResponseEntity<?> addSpecialistToFavorite(@Valid @RequestBody Customer customer, @PathVariable("specialistId") String specialistId, BindingResult bindingResult){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+        if(errorMap != null) return errorMap;
 
          Customer existingCustomer = customerServiceImpl.addSpecialistToFavorite(specialistServiceImpl.findSpecialistById(specialistId),customer);
 
