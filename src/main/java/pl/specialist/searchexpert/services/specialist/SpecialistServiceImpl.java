@@ -27,13 +27,6 @@ public class SpecialistServiceImpl implements SpecialistService{
     }
 
     @Override
-    public Specialist createSpecialistAccount(Specialist specialist){
-
-        if(specialistRepo.findByMail(specialist.getMail()) != null) throw new SpecialistIdException("Account with this email: '" + specialist.getMail() + "' already exist");
-        if(specialistRepo.findByPhoneNumber(specialist.getPhoneNumber()) != null) throw new SpecialistIdException("Account with this phone Number: '" + specialist.getPhoneNumber() + "' already exist");
-        return specialistRepo.save(specialist);
-    }
-    @Override
     public Specialist updateSpecialistAccount(Specialist specialist){
         Specialist existingSpecialist = specialistRepo.findBySpecialistId(specialist.getSpecialistId());
         if(existingSpecialist.getSpecialistId() == null) throw new SpecialistNotFoundException("Cannot Update Specialist with email: '" + specialist.getSpecialistId() + "' doesn't exist");

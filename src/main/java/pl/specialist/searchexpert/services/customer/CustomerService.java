@@ -5,7 +5,6 @@ import pl.specialist.searchexpert.domains.specialist.Specialist;
 
 public interface CustomerService {
 
-    Customer createCustomerAccount(Customer customer);
     Customer updateCustomerAccount(Customer customer);
     void deleteCustomerByCustomerId(String customerId);
     Customer findCustomerById(String customerId);

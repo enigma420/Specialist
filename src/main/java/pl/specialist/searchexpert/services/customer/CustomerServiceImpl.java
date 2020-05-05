@@ -27,13 +27,6 @@ public class CustomerServiceImpl implements CustomerService {
         this.specialistRepo = specialistRepo;
     }
 
-    @Override
-    public Customer createCustomerAccount(Customer customer) {
-        if(customerRepo.findByNickname(customer.getNickname()) != null) throw new CustomerIdException("Account with this nickname: '" + customer.getNickname() + "' already exist");
-        if(customerRepo.findByMail(customer.getMail()) != null) throw new CustomerIdException("Account with this email: '" + customer.getMail() + "' already exist");
-        if(customerRepo.findByPhoneNumber(customer.getPhoneNumber()) != null) throw new CustomerIdException("Account with this phone Number: '" + customer.getPhoneNumber() + "' already exist");
-        return customerRepo.save(customer);
-    }
 
     @Override
     public Customer updateCustomerAccount(Customer customer) {
