@@ -64,11 +64,11 @@ public class Specialist implements UserDetails {
     @Column(name = "average_rate")
     private Double averageRate;
 
+    private boolean enable;
 
-
-    private boolean isEnabledToUse;
-
-
+    @JsonIgnore
+    @ManyToMany
+    private Set<Customer> markedByCustomers;
 
     public Specialist() {
     }
@@ -97,12 +97,16 @@ public class Specialist implements UserDetails {
         this.password = password;
     }
 
-    public boolean isEnabledToUse() {
-        return isEnabledToUse;
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
-    public void setEnabledToUse(boolean enabledToUse) {
-        isEnabledToUse = enabledToUse;
+    public Set<Customer> getMarkedByCustomers() {
+        return markedByCustomers;
+    }
+
+    public void setMarkedByCustomers(Set<Customer> markedByCustomers) {
+        this.markedByCustomers = markedByCustomers;
     }
 
     public String getConfirmMail() {
@@ -194,6 +198,7 @@ public class Specialist implements UserDetails {
         this.averageRate = averageRate;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("SPECIALIST"));
@@ -222,6 +227,6 @@ public class Specialist implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enable;
     }
 }
