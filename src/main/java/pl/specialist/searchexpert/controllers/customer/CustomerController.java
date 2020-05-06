@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.specialist.searchexpert.domains.customer.Customer;
+import pl.specialist.searchexpert.request.CustomerIdSpecialistIdBody;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.customer.CustomerServiceImpl;
 import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
@@ -48,15 +49,19 @@ public class CustomerController {
     }
 
     /*Specialist*/
-    @PostMapping("/addSpec/{specialistId}")
-    public ResponseEntity<?> addSpecialistToFavorite(@Valid @RequestBody Customer customer, @PathVariable("specialistId") String specialistId, BindingResult bindingResult){
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if(errorMap != null) return errorMap;
+    @PostMapping("/addSpec")
+    public ResponseEntity<?> addSpecialistToFavorite(@RequestBody CustomerIdSpecialistIdBody customerIdSpecialistIdBody){
+        customerServiceImpl.addSpecialistToFavorite(customerIdSpecialistIdBody.getSpecialistId(),customerIdSpecialistIdBody.getCustomerId());
 
-         Customer existingCustomer = customerServiceImpl.addSpecialistToFavorite(specialistServiceImpl.findSpecialistById(specialistId),customer);
-
-        return new ResponseEntity<>(existingCustomer,HttpStatus.OK);
+        return new ResponseEntity<>("Specialist was added to your Favourite Specialist List !",HttpStatus.OK);
     }
+
+    @DeleteMapping("/deleteSpec/{customerId}/{specialistId}")
+    public ResponseEntity<?> deleteSpecialistFromCustomerFavorite(@PathVariable("customerId") String customerId, @PathVariable("specialistId") String specialistId){
+        customerServiceImpl.deleteSpecialistFromFavourite(customerId,specialistId);
+        return new ResponseEntity<>("Specialist was removed from Your Favourite Specialist List !",HttpStatus.OK);
+    }
+
 
     @DeleteMapping("/delete/{customerId}")
     public ResponseEntity<?> deleteCustomer(@PathVariable("customerId") String customerId){

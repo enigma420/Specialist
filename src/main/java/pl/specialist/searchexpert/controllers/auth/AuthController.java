@@ -1,21 +1,15 @@
 package pl.specialist.searchexpert.controllers.auth;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import pl.specialist.searchexpert.domains.SpecialistConfirmationToken;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.payload.login.JWTLoginSuccessResponse;
 import pl.specialist.searchexpert.payload.login.LoginRequest;
 import pl.specialist.searchexpert.payload.register.ApiResponse;
-import pl.specialist.searchexpert.repositories.SpecialistConfirmationTokenRepo;
-import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
-import pl.specialist.searchexpert.services.EmailSenderService;
 import pl.specialist.searchexpert.services.auth.AuthServiceImpl;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 
