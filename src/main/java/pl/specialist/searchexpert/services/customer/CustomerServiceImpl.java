@@ -3,15 +3,14 @@ package pl.specialist.searchexpert.services.customer;
 import org.springframework.stereotype.Service;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
+import pl.specialist.searchexpert.exceptions.CustomerAlreadyExistInFavouriteException;
+import pl.specialist.searchexpert.exceptions.SpecialistAlreadyExistInFavouriteException;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerIdException;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerNotFoundException;
-import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistIdException;
-import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistNotFoundException;
 import pl.specialist.searchexpert.repositories.customer.CustomerRepo;
 import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -42,35 +41,49 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepo.save(customer);
     }
 
-
-    public boolean checkMarkedSpecialistsSet(Set<Specialist> groupOfSpecialists , String specialistId){
-        if(groupOfSpecialists.isEmpty()) return true;
-        else{
-            for(Specialist spec : groupOfSpecialists){
-                if(spec.getSpecialistId().equals(specialistId)) return false;
-            }
-        }
-        return true;
+    public Set<Specialist> updateSpecialistFavoriteSet(Set<Specialist> setBeforeAddNewSpecialist, Specialist newestFavoriteSpecialist){
+        if(setBeforeAddNewSpecialist.contains(newestFavoriteSpecialist)) throw new SpecialistAlreadyExistInFavouriteException("Specialist already exist in Your Favourite List");
+        setBeforeAddNewSpecialist.add(newestFavoriteSpecialist);
+        return setBeforeAddNewSpecialist;
     }
+
+    public Set<Customer> updateMarkedByCustomersSet(Set<Customer> setBeforeAddedByCustomer, Customer newestMarkedByCustomer){
+        if(setBeforeAddedByCustomer.contains(newestMarkedByCustomer)) throw new CustomerAlreadyExistInFavouriteException("Customer already exist in Your Marked Favourite List");
+        setBeforeAddedByCustomer.add(newestMarkedByCustomer);
+        return setBeforeAddedByCustomer;
+    }
+
 
     /*Specialist*/
     @Override
-    public Customer addSpecialistToFavorite(Specialist specialist,Customer customer){
-        if(specialistRepo.count() == 0) throw new SpecialistNotFoundException("Any Specialist isn't exist");
-        if(checkMarkedSpecialistsSet(customer.getMarkedSpecialists(),specialist.getSpecialistId())) {
-            customer.getMarkedSpecialists().add(specialist);
-            customer.setMarkedSpecialists(customer.getMarkedSpecialists());
-        } else throw new CustomerIdException("you have this specialist in your favorite list");
-        return customerRepo.save(customer);
+    public void addSpecialistToFavorite(String specialistId,String customerId){
+       Customer customer = customerRepo.findByCustomerId(customerId);
+       Specialist newestSpecialist = specialistRepo.findBySpecialistId(specialistId);
+       customer.setMarkedSpecialists(updateSpecialistFavoriteSet(customer.getMarkedSpecialists(),newestSpecialist));
+       newestSpecialist.setMarkedByCustomers(updateMarkedByCustomersSet(newestSpecialist.getMarkedByCustomers(),customer));
     }
 
     @Override
-    public void deleteCustomerByCustomerId(String customerId) {
-        if (customerRepo.count() == 0) throw new CustomerNotFoundException("Any Customer isn't exist");
+    public void deleteSpecialistFromFavourite(String customerId, String specialistId){
+        customerRepo.findByCustomerId(customerId).getMarkedSpecialists().remove(specialistRepo.findBySpecialistId(specialistId));
+        specialistRepo.findBySpecialistId(specialistId).getMarkedByCustomers().remove(customerRepo.findByCustomerId(customerId));
+    }
+
+    public void deleteCustomerFromAllSpecialistFavouriteLists(Set<Specialist> setOfAllSpecialistWhichMarkedByConcreteCustomer,String customerId){
+        for(Specialist spec : setOfAllSpecialistWhichMarkedByConcreteCustomer){
+            spec.getMarkedByCustomers().remove(customerRepo.findByCustomerId(customerId));
+        }
+        setOfAllSpecialistWhichMarkedByConcreteCustomer.clear();
+    }
+
+    @Override
+    public void deleteCustomerByCustomerId(String customerId){
         Customer customer = customerRepo.findByCustomerId(customerId);
         if (customer == null) throw new CustomerIdException("Cannot Delete Customer with ID: '" + customerId + "' because doesn't exist");
-        customerRepo.delete(findCustomerById(customerId));
+        deleteCustomerFromAllSpecialistFavouriteLists(customer.getMarkedSpecialists(),customerId);
+        customerRepo.delete(customer);
     }
+
 
     @Override
     public Customer findCustomerById(String customerId) {

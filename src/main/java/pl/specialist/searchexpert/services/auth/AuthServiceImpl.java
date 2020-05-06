@@ -66,10 +66,10 @@ public class AuthServiceImpl implements AuthService{
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken;
         if(customerRepo.findByMail(loginRequest.getMail()) == null){
-            if(specialistRepo.findByMail(loginRequest.getMail()).isEnabledToUse()) jwtToken = TOKEN_PREFIX + tokenProvider.generateTokenForSpecialist(authentication);
+            if(specialistRepo.findByMail(loginRequest.getMail()).isEnabled()) jwtToken = TOKEN_PREFIX + tokenProvider.generateTokenForSpecialist(authentication);
             else throw new UnconfirmedAccountException("Specialist Please confirm you account by token from mail");
         }else {
-                if(customerRepo.findByMail(loginRequest.getMail()).isEnabledToUse()) jwtToken = TOKEN_PREFIX + tokenProvider.generateTokenForCustomer(authentication);
+                if(customerRepo.findByMail(loginRequest.getMail()).isEnabled()) jwtToken = TOKEN_PREFIX + tokenProvider.generateTokenForCustomer(authentication);
                 else throw new UnconfirmedAccountException("Customer Please confirm you account by token from mail");
         }
         return jwtToken;
@@ -135,8 +135,9 @@ public class AuthServiceImpl implements AuthService{
 
         if(token != null){
             Customer customer = customerRepo.findByMail(token.getCustomer().getMail());
-            customer.setEnabledToUse(true);
+            customer.setEnable(true);
             customerRepo.save(customer);
+            customerConfirmationTokenRepo.delete(token);
         }else throw new InvalidConfirmTokenException("This confirm token is wrong !");
     }
 
@@ -145,8 +146,9 @@ public class AuthServiceImpl implements AuthService{
 
         if(token != null){
             Specialist specialist = specialistRepo.findByMail(token.getSpecialist().getMail());
-            specialist.setEnabledToUse(true);
+            specialist.setEnable(true);
             specialistRepo.save(specialist);
+            specialistConfirmationTokenRepo.delete(token);
         }else throw new InvalidConfirmTokenException("This confirm token is wrong !");
     }
 

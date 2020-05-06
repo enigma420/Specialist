@@ -47,12 +47,13 @@ public class Customer implements UserDetails {
     @Transient
     private String confirmPassword;
 
-    private boolean isEnabledToUse;
+    private boolean enable;
 
+    @JsonIgnore
     @ManyToMany
     private Set<Specialist> markedSpecialists;
 
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY,mappedBy = "customer")
     private Set<Commission> commissions;
 
@@ -74,12 +75,8 @@ public class Customer implements UserDetails {
         this.password = password;
     }
 
-    public boolean isEnabledToUse() {
-        return isEnabledToUse;
-    }
-
-    public void setEnabledToUse(boolean enabledToUse) {
-        isEnabledToUse = enabledToUse;
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     public String getCustomerId() {
@@ -191,6 +188,6 @@ public class Customer implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enable;
     }
 }
