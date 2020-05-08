@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -58,11 +59,11 @@ public class Specialist implements UserDetails {
     private String password;
     @Transient
     private String confirmPassword;
-    @Column(name = "rate")
-    private HashMap<String,Double> rateStars;
+    private Integer numberOfRatings = 0;
     @Range(min = 0 , max = 5)
     @Column(name = "average_rate")
-    private Double averageRate;
+    private Double averageRate = 0.0;
+    private Double sumOfRatingsValue = 0.0;
 
     private boolean enable;
 
@@ -73,7 +74,7 @@ public class Specialist implements UserDetails {
     public Specialist() {
     }
 
-    public Specialist(String name,String surname,Province province, String city, String profession, String phoneNumber,String mail,HashMap<String,Double> rateStars,Double  averageRate) {
+    public Specialist(String name,String surname,Province province, String city, String profession, String phoneNumber,String mail,Integer numberOfRatings,Double  averageRate) {
         this.name = name;
         this.surname = surname;
         this.province = province;
@@ -81,7 +82,7 @@ public class Specialist implements UserDetails {
         this.profession = profession;
         this.phoneNumber = phoneNumber;
         this.mail = mail;
-        this.rateStars = rateStars;
+        this.numberOfRatings = numberOfRatings;
         this.averageRate = averageRate;
     }
 
@@ -173,12 +174,25 @@ public class Specialist implements UserDetails {
         return mail;
     }
 
-    public HashMap<String, Double> getRateStars() {
-        return rateStars;
+//    public HashMap<String, Double> getRateStars() {
+//        return rateStars;
+//    }
+
+
+    public Double getSumOfRatingsValue() {
+        return sumOfRatingsValue;
     }
 
-    public void setRateStars(HashMap<String, Double> rateStars) {
-        this.rateStars = rateStars;
+    public void setSumOfRatingsValue(Double sumOfRatingsValue) {
+        this.sumOfRatingsValue = sumOfRatingsValue;
+    }
+
+    public Integer getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(Integer numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
     }
 
     public String getPassword() {

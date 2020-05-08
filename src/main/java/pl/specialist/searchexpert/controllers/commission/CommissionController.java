@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.specialist.searchexpert.domains.commission.Commission;
+import pl.specialist.searchexpert.request.CommissionWithCustomerId;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.commission.CommissionServiceImpl;
 
@@ -29,21 +30,19 @@ public class CommissionController {
     }
 
 
-    @PostMapping("/add/{customerId}")
-    public ResponseEntity<?> addCommission(@Valid @RequestBody Commission commission, @PathVariable("customerId") String customerId, BindingResult bindingResult){
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if(errorMap != null) return errorMap;
+    @PostMapping("/add")
+    public ResponseEntity<?> addCommission(@Valid @RequestBody CommissionWithCustomerId commissionWithCustomerId){
 
-        Commission newCommission = commissionServiceImpl.createCommission(commission,customerId);
+
+        Commission newCommission = commissionServiceImpl.createCommission(commissionWithCustomerId.getCommission(),commissionWithCustomerId.getCustomerId());
         return new ResponseEntity<>(newCommission,HttpStatus.CREATED);
     }
 
-    @PostMapping("/edit/{customerId}")
-    public ResponseEntity<?> editCommission(@Valid @RequestBody Commission commission, BindingResult bindingResult,@PathVariable("customerId") String customerId){
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if(errorMap != null) return errorMap;
+    @PostMapping("/edit")
+    public ResponseEntity<?> editCommission(@Valid @RequestBody CommissionWithCustomerId commissionWithCustomerId){
 
-        Commission existingCommission = commissionServiceImpl.updateCommission(commission,customerId);
+
+        Commission existingCommission = commissionServiceImpl.updateCommission(commissionWithCustomerId.getCommission(),commissionWithCustomerId.getCustomerId());
         return new ResponseEntity<>(existingCommission,HttpStatus.OK);
     }
 
@@ -54,7 +53,7 @@ public class CommissionController {
     }
 
     @GetMapping("/getAll/{customerId}")
-    public ResponseEntity<?> getAllCommissions(@PathVariable("customerId") String customerId){
+    public ResponseEntity<?> getCustomerAllCommissions(@PathVariable("customerId") String customerId){
         Iterable<Commission> allCommissions = commissionServiceImpl.findAllCustomerCommissions(customerId);
         return new ResponseEntity<>(allCommissions,HttpStatus.OK);
     }
@@ -66,20 +65,11 @@ public class CommissionController {
         return new ResponseEntity<>(commission,HttpStatus.OK);
     }
 
-    @GetMapping("/getByCity/{city}")
-    public ResponseEntity<?> getCommissionsByCity(@PathVariable("city") String city){
-
-        HashSet<Commission> listOfCommissions = commissionServiceImpl.findCommissionsByCity(city);
-
-        return new ResponseEntity<>(listOfCommissions,HttpStatus.OK);
-    }
-
-    @GetMapping("/getByProfession/{profession}")
-    public ResponseEntity<?> getCommissionsByProfession(@PathVariable("profession") String profession){
-
-        HashSet<Commission> listOfCommissions = commissionServiceImpl.findCommissionsByProfession(profession);
-
-        return new ResponseEntity<>(listOfCommissions,HttpStatus.OK);
+    @GetMapping("/get")
+    public ResponseEntity<HashSet<Commission>> getCommissionsByProfessionAndCity(@RequestParam(value = "profession",required = false) String profession,
+                                                                                 @RequestParam(value = "city", required = false) String city){
+        HashSet<Commission> setOfCommissions = commissionServiceImpl.findCommissionsByProfessionAndLocation(profession,city);
+        return new ResponseEntity<>(setOfCommissions,HttpStatus.OK);
     }
 
 }

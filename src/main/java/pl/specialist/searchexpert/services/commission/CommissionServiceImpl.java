@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.specialist.searchexpert.domains.commission.Commission;
 import pl.specialist.searchexpert.domains.customer.Customer;
+import pl.specialist.searchexpert.domains.specialist.Province;
+import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.exceptions.commission.exceptions.CommissionIdException;
 import pl.specialist.searchexpert.exceptions.commission.exceptions.CommissionNotFoundException;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerNotFoundException;
@@ -68,27 +70,19 @@ public class CommissionServiceImpl implements CommissionService {
 
     @Override
     public Commission findCommissionByCommissionId(String commissionId,String nickname) {
-        Commission commission = commissionRepo.findByCommissionId(commissionId);
         if(commissionRepo.count() == 0) throw new SpecialistNotFoundException("Any Commission isn't exist");
+        Commission commission = commissionRepo.findByCommissionId(commissionId);
+
         if(commission == null) throw new CommissionIdException("Commission with ID: '" + commissionId + "' doesn't exist");
-        if(!commission.getCustomer().getNickname().equals(nickname)) throw new CommissionNotFoundException("Commission not found in your account");
 
         return commission;
     }
 
 
     @Override
-    public HashSet<Commission> findCommissionsByProfession(String profession) {
+    public HashSet<Commission> findCommissionsByProfessionAndLocation(String profession, String city) {
         if(commissionRepo.count() == 0) throw new SpecialistNotFoundException("Any Commission isn't exist");
-        HashSet<Commission> setOfCommissions = commissionRepo.findByProfession(profession);
-        if(setOfCommissions.size() == 0) throw new CommissionNotFoundException("Any Commissions with profession: '" + profession + "' doesn't exist");
-        return setOfCommissions;
-    }
-
-    @Override
-    public HashSet<Commission> findCommissionsByCity(String city) {
-        if(commissionRepo.count() == 0) throw new SpecialistNotFoundException("Any Commission isn't exist");
-        HashSet<Commission> setOfCommissions = commissionRepo.findByCity(city);
+        HashSet<Commission> setOfCommissions = commissionRepo.findCommissionsByProfessionAndCity(profession,city);
         if(setOfCommissions.size() == 0) throw new CommissionNotFoundException("Any Commissions with profession: '" + city + "' doesn't exist");
         return setOfCommissions;
     }

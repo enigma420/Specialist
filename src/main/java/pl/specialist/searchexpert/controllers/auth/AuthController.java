@@ -65,7 +65,7 @@ public class AuthController {
 
         authServiceImpl.confirmCustomerAccount(confirmationToken);
 
-        return ResponseEntity.ok("Specialist Register Successfully");
+        return ResponseEntity.ok("Customer Register Successfully");
 
     }
 
