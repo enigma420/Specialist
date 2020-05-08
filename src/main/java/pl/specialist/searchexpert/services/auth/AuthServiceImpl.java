@@ -22,6 +22,8 @@ import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
 import pl.specialist.searchexpert.security.JwtTokenProvider;
 import pl.specialist.searchexpert.services.EmailSenderService;
 
+import java.util.ArrayList;
+
 import static pl.specialist.searchexpert.security.SecurityConstants.TOKEN_PREFIX;
 
 @Service
@@ -60,7 +62,8 @@ public class AuthServiceImpl implements AuthService{
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getMail(),
-                        loginRequest.getPassword()
+                        loginRequest.getPassword(),
+                        new ArrayList<>()
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -130,6 +133,7 @@ public class AuthServiceImpl implements AuthService{
         return specialist;
     }
 
+    @Override
     public void confirmCustomerAccount(String confirmationToken){
         CustomerConfirmationToken token = customerConfirmationTokenRepo.findByConfirmationToken(confirmationToken);
 
@@ -141,6 +145,7 @@ public class AuthServiceImpl implements AuthService{
         }else throw new InvalidConfirmTokenException("This confirm token is wrong !");
     }
 
+    @Override
     public void confirmSpecialistAccount(String confirmationToken){
         SpecialistConfirmationToken token = specialistConfirmationTokenRepo.findByConfirmationToken(confirmationToken);
 

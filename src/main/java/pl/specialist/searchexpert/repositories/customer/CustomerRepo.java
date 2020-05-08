@@ -14,5 +14,4 @@ public interface CustomerRepo extends JpaRepository<Customer,String> {
     Customer findByCustomerId(String id);
     Customer findByMail(String mail);
     Customer findByNickname(String nickname);
-    Customer findByPhoneNumber(String phoneNumber);
 }

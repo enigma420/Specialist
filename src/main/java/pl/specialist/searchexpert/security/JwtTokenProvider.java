@@ -23,7 +23,7 @@ public class JwtTokenProvider {
         String userId = specialist.getSpecialistId();
         Map<String,Object> claims = new HashMap<>();
         claims.put("id",specialist.getSpecialistId());
-        claims.put("mail", specialist.getMail());
+//        claims.put("mail", specialist.getMail());
 
 
         return Jwts.builder()
@@ -43,7 +43,7 @@ public class JwtTokenProvider {
         String userId = customer.getCustomerId();
         Map<String,Object> claims = new HashMap<>();
         claims.put("id",customer.getCustomerId());
-        claims.put("mail", customer.getMail());
+//        claims.put("mail", customer.getMail());
 
 
         return Jwts.builder()

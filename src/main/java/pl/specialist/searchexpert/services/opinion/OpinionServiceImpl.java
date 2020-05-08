@@ -1,11 +1,9 @@
 package pl.specialist.searchexpert.services.opinion;
 
 import org.springframework.stereotype.Service;
-import pl.specialist.searchexpert.domains.commission.Commission;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.opinion.Opinion;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
-import pl.specialist.searchexpert.exceptions.commission.exceptions.CommissionIdException;
 import pl.specialist.searchexpert.exceptions.opinion.exceptions.OpinionIdException;
 import pl.specialist.searchexpert.exceptions.opinion.exceptions.OpinionNotFoundException;
 import pl.specialist.searchexpert.repositories.customer.CustomerRepo;
@@ -13,8 +11,6 @@ import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
 import pl.specialist.searchexpert.repositories.opinion.OpinionRepo;
 
 import javax.transaction.Transactional;
-import java.lang.annotation.Documented;
-import java.util.HashMap;
 import java.util.HashSet;
 
 @Service
@@ -34,26 +30,18 @@ public class OpinionServiceImpl implements OpinionService{
         this.specialistRepo = specialistRepo;
     }
 
-    public Double sumAllRatesValuesFromHashMap(HashMap<String,Double> rates){
-        Double avgRate = 0.0;
-        for(Double rate : rates.values()){
-            avgRate += rate;
-        }
-        return (avgRate/rates.size());
-    }
 
     @Override
     public Opinion createOpinion(Opinion opinion, String customerId, String specialistId) {
-        if(opinion.getOpinionId() != null) throw new OpinionIdException("Opinion Id is exists");
+        if(findConcreteCustomerOpinionToConcreteSpecialist(customerId,specialistId) != null) throw new OpinionIdException("Specialist already have got opinion from You !");
         try{
-
             Customer customer = customerRepo.findByCustomerId(customerId);
             opinion.setCustomer(customer);
             Specialist specialist = specialistRepo.findBySpecialistId(specialistId);
             opinion.setSpecialist(specialist);
-//            HashMap<String,Double> rates = specialist.getRateStars();
-//            rates.put(opinion.getOpinionId(),opinion.getRate());
-//            specialist.setAverageRate(sumAllRatesValuesFromHashMap(rates));
+            specialist.setNumberOfRatings(specialist.getNumberOfRatings()+1);
+            specialist.setSumOfRatingsValue(specialist.getSumOfRatingsValue()+opinion.getRate());
+            specialist.setAverageRate(specialist.getSumOfRatingsValue()/specialist.getNumberOfRatings());
             return opinionRepo.save(opinion);
         }catch (Exception e){
             throw new OpinionIdException("Opinion with ID '" + opinion.getOpinionId() + "' already exist");
@@ -68,34 +56,32 @@ public class OpinionServiceImpl implements OpinionService{
         opinion.setCustomer(customerRepo.findByCustomerId(customerId));
         Specialist specialist = specialistRepo.findBySpecialistId(specialistId);
         opinion.setSpecialist(specialist);
-        HashMap<String,Double> rates = specialist.getRateStars();
-        rates.replace(opinion.getOpinionId(),opinion.getRate());
-        specialist.setAverageRate(sumAllRatesValuesFromHashMap(rates));
+        /*TODO Create logic for stars when customer edit opinion*/
+//        HashMap<String,Double> rates = (HashMap<String, Double>) specialist.getRateStars();
+//        rates.replace(opinion.getOpinionId(),opinion.getRate());
+//        specialist.setAverageRate(sumAllRatesValuesFromHashMap(rates));
         return opinionRepo.save(opinion);
     }
 
     @Override
-    public void deleteOpinionByOpinionId(String opinionId, String customerNickname) {
-        if(opinionRepo.count() == 0) throw new OpinionNotFoundException("You cannot delete Opinion because doesn't exist");
-        Customer customer = customerRepo.findByNickname(customerNickname);
-        Opinion opinion = opinionRepo.findByOpinionIdAndCustomer(opinionId,customer);
-        if(opinion == null) throw new OpinionIdException("Cannot Delete Opinion with ID: '" + opinionId + "' because doesn't exist");
+    public void deleteOpinionByCustomerIdAndSpecialistId(String customerId, String specialistId) {
+        Specialist foundSpecialist = specialistRepo.findBySpecialistId(specialistId);
+        Customer foundCustomer = customerRepo.findByCustomerId(customerId);
+        if(findConcreteCustomerOpinionToConcreteSpecialist(customerId,specialistId) == null) throw new OpinionNotFoundException("You cannot delete Opinion because doesn't exist");
+        opinionRepo.deleteByCustomerAndSpecialist(foundCustomer,foundSpecialist);
     }
 
 
     @Override
     public Iterable<Opinion> findAllSpecialistOpinions(String specialistId) {
-        if(opinionRepo.count() == 0) throw new OpinionNotFoundException("Any opinion isn't exist");
-
         Specialist specialist = specialistRepo.findBySpecialistId(specialistId);
         HashSet<Opinion> allOpinionsOfSpecialist = opinionRepo.findOpinionsBySpecialist(specialist);
-        if(allOpinionsOfSpecialist.isEmpty()) throw new OpinionNotFoundException("Specialist with mail: '" + specialist.getMail() + "' doesn't have any opinions");
+        if(allOpinionsOfSpecialist.isEmpty()) throw new OpinionNotFoundException("Any Opinion isn't exist");
         return allOpinionsOfSpecialist;
     }
 
     @Override
     public Opinion findConcreteCustomerOpinionToConcreteSpecialist(String customerId, String specialistId) {
-        if(opinionRepo.count() == 0) throw new OpinionNotFoundException("You cannot delete Opinion because doesn't exist");
         Specialist foundSpecialist = specialistRepo.findBySpecialistId(specialistId);
         Customer foundCustomer = customerRepo.findByCustomerId(customerId);
         Opinion opinion = opinionRepo.findByCustomerAndSpecialist(foundCustomer,foundSpecialist);
@@ -106,7 +92,7 @@ public class OpinionServiceImpl implements OpinionService{
     public HashSet<Opinion> findAllCustomerOpinions(String customerId) {
         Customer customer = customerRepo.findByCustomerId(customerId);
         HashSet<Opinion> allOpinionsByOneCustomer = opinionRepo.findOpinionsByCustomer(customer);
-        if(allOpinionsByOneCustomer.isEmpty()) throw new OpinionNotFoundException("Customer with ID: '" + customer.getCustomerId() + "' doesn't have any opinions");
+        if(allOpinionsByOneCustomer.isEmpty()) throw new OpinionNotFoundException("Any Opinion isn't exist");
         return allOpinionsByOneCustomer;
     }
 }

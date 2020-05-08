@@ -1,4 +1,4 @@
-package pl.specialist.searchexpert.exceptions;
+package pl.specialist.searchexpert.exceptions.customer;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

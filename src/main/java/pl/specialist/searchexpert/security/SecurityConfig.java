@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import pl.specialist.searchexpert.services.auth.CustomUserDetailsService;
 
-import static pl.specialist.searchexpert.security.SecurityConstants.SIGN_UP_URLS;
+import static pl.specialist.searchexpert.security.SecurityConstants.SIGN_UP_AND_LOGIN_URLS;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint unAuthorizedHandler;
 
     private final CustomUserDetailsService customUserDetailsService;
+
+
 
     @Autowired
     public SecurityConfig(JwtAuthenticationEntryPoint unAuthorizedHandler, CustomUserDetailsService customUserDetailsService) {
@@ -60,8 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unAuthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .headers().frameOptions().sameOrigin() //To enable H2 db
-                .and()
                 .authorizeRequests()
                 .antMatchers(
                         "/",
@@ -79,10 +79,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/customer/**").permitAll()
                 .antMatchers("/api/opinion/**").permitAll()
                 .antMatchers("/api/commission/**").permitAll()
-                .antMatchers(SIGN_UP_URLS).permitAll()
+                .antMatchers(SIGN_UP_AND_LOGIN_URLS).permitAll()
                 .anyRequest().authenticated();
-
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                http.addFilterAt(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 }
+
+
+//.access("hasAuthority('CUSTOMER') or hasAuthority('SPECIALIST')")
+//        ccess("hasAuthority('CUSTOMER') or hasAuthority('SPECIALIST')")
+//        cess("hasAuthority('CUSTOMER')")
+//        .access("hasAuthority('CUSTOMER') or hasAuthority('SPECIALIST')")

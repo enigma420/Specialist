@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import pl.specialist.searchexpert.domains.customer.Customer;
+import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.services.auth.CustomUserDetailsService;
 
 import javax.servlet.FilterChain;
@@ -34,12 +36,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = getJWTFromRequest(httpServletRequest);
             if(StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)){
                 String userId = tokenProvider.getUserIdFromJWT(jwt);
-                UserDetails user = customUserDetailsService.loadUserById(userId);
-
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        user,null, user.getAuthorities()
-                );
-
+                Object user = customUserDetailsService.loadUserById(userId);
+                UsernamePasswordAuthenticationToken authentication = null;
+                    if(user instanceof Customer){
+                        Customer customer = (Customer)user;
+                        authentication = new UsernamePasswordAuthenticationToken(
+                                customer.getCustomerId(),null, customer.getAuthorities()
+                        );
+                    }else if(user instanceof Specialist){
+                        Specialist specialist = (Specialist)user;
+                         authentication = new UsernamePasswordAuthenticationToken(
+                                specialist.getSpecialistId(),null, specialist.getAuthorities()
+                        );
+                    }
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

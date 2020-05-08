@@ -15,10 +15,9 @@ public interface OpinionRepo extends JpaRepository<Opinion,String> {
 
     Opinion findByOpinionId(String opinionId);
 
-    Opinion findByOpinionIdAndCustomer(String opinionId, Customer customer);
     HashSet<Opinion> findOpinionsBySpecialist(Specialist specialist);
     HashSet<Opinion> findOpinionsByCustomer(Customer customer);
-
+    void deleteByCustomerAndSpecialist(Customer customer,Specialist specialist);
     Opinion findByCustomerAndSpecialist(Customer customer, Specialist specialist);
 
 
