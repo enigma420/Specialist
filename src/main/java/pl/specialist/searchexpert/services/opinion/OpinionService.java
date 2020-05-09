@@ -8,7 +8,7 @@ public interface OpinionService {
 
     Opinion createOpinion(Opinion opinion, String customerId, String specialistId);
     Opinion updateOpinion(Opinion opinion, String customerId, String specialistId);
-    void deleteOpinionByOpinionId(String opinionId,String customerNickname);
+    void deleteOpinionByCustomerIdAndSpecialistId(String customerId, String specialistId);
     Iterable<Opinion> findAllSpecialistOpinions(String specialistId);
     Opinion findConcreteCustomerOpinionToConcreteSpecialist(String customerId, String specialistId);
     HashSet<Opinion> findAllCustomerOpinions(String customerNickname);

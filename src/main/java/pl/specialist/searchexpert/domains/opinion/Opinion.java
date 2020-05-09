@@ -31,11 +31,9 @@ public class Opinion {
     @Column(name = "rate")
     private Double rate;
 
-
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
     @ManyToOne
     @JoinColumn(name = "specialist_id")
     private Specialist specialist;
