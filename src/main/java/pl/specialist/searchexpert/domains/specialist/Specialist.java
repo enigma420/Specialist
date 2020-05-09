@@ -2,15 +2,11 @@ package pl.specialist.searchexpert.domains.specialist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
 import pl.specialist.searchexpert.domains.customer.Customer;
-import pl.specialist.searchexpert.domains.opinion.Opinion;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -184,11 +180,6 @@ public class Specialist implements UserDetails {
     public String getMail() {
         return mail;
     }
-
-//    public HashMap<String, Double> getRateStars() {
-//        return rateStars;
-//    }
-
 
     public Double getSumOfRatingsValue() {
         return sumOfRatingsValue;

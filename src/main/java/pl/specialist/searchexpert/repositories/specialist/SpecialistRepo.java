@@ -8,7 +8,6 @@ import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
 
 import java.util.HashSet;
-import java.util.List;
 
 @Repository
 public interface SpecialistRepo extends JpaRepository<Specialist,Long> {
@@ -18,7 +17,6 @@ public interface SpecialistRepo extends JpaRepository<Specialist,Long> {
 
     Specialist findBySpecialistId(String id);
     Specialist findByMail(String mail);
-    Specialist findByPhoneNumber(String phoneNumber);
 
     /*Find SPECIALISTS by personal identity*/
     @Query("SELECT c FROM Specialist c WHERE (:name is null or c.name = :name) and (:surname is null or c.surname = :surname)")

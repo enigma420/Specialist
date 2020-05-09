@@ -8,6 +8,7 @@ import pl.specialist.searchexpert.domains.specialist.Specialist;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 
 public interface SpecialistService {
 
@@ -21,6 +22,6 @@ public interface SpecialistService {
     Iterable<Specialist> findSpecialistsByPersonalIdentity(String name, String surname);
     HashSet<Specialist> findSpecialistsByProfessionAndLocation(Province province, String city, String profession);
     Specialist updateSpecialistRate(Specialist specialist, Integer stars);
-//    Specialist markedByCustomer(Specialist specialist, Customer customer);
 HashSet<Opinion> findAllSpecialistOpinionsById(String specialistId);
+    void deleteSpecialistFromAllCustomersFavouriteLists(Set<Customer> setOfAllCustomerWhichMarkedConcreteSpecialist, String specialistId);
 }

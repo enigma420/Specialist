@@ -11,7 +11,6 @@ import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.commission.CommissionServiceImpl;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.HashSet;
 
 @RestController

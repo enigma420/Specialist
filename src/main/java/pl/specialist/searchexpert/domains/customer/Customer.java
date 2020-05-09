@@ -159,6 +159,7 @@ public class Customer implements UserDetails {
         this.confirmPassword = confirmPassword;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("CUSTOMER"));

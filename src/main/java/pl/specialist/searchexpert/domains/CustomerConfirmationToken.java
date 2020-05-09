@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@Table(name = "customer_confirmation_token")
 public class CustomerConfirmationToken {
 
     @Id

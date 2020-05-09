@@ -9,7 +9,6 @@ import pl.specialist.searchexpert.request.CustomerIdSpecialistIdBody;
 import pl.specialist.searchexpert.request.SpecialistIdBody;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.customer.CustomerServiceImpl;
-import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
 
 import javax.validation.Valid;
 import java.security.Principal;

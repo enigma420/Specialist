@@ -10,7 +10,6 @@ import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.repositories.customer.CustomerRepo;
 import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
 
-import javax.transaction.Transactional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -36,12 +35,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         }else throw new UsernameNotFoundException("User not found");
     }
 
-    @Transactional
+
     public UserDetails loadUserById(String id){
         if(specialistRepo.findBySpecialistId(id) != null){
             return specialistRepo.findBySpecialistId(id);
         }else if(customerRepo.findByCustomerId(id) != null){
             return customerRepo.findByCustomerId(id);
-        }else throw new  UsernameNotFoundException("User not found");
+        }else throw new  UsernameNotFoundException("(loadUserById): User not found");
     }
 }

@@ -1,12 +1,9 @@
 package pl.specialist.searchexpert.services.opinion;
 
 import org.springframework.stereotype.Service;
-import pl.specialist.searchexpert.domains.commission.Commission;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.opinion.Opinion;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
-import pl.specialist.searchexpert.exceptions.CustomerAlreadyExistInFavouriteException;
-import pl.specialist.searchexpert.exceptions.commission.exceptions.CommissionIdException;
 import pl.specialist.searchexpert.exceptions.opinion.exceptions.OpinionIdException;
 import pl.specialist.searchexpert.exceptions.opinion.exceptions.OpinionNotFoundException;
 import pl.specialist.searchexpert.repositories.customer.CustomerRepo;
@@ -14,11 +11,7 @@ import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
 import pl.specialist.searchexpert.repositories.opinion.OpinionRepo;
 
 import javax.transaction.Transactional;
-import java.lang.annotation.Documented;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 @Service
 @Transactional

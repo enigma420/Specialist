@@ -3,8 +3,8 @@ package pl.specialist.searchexpert.services.customer;
 import org.springframework.stereotype.Service;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
-import pl.specialist.searchexpert.exceptions.CustomerAlreadyExistInFavouriteException;
-import pl.specialist.searchexpert.exceptions.SpecialistAlreadyExistInFavouriteException;
+import pl.specialist.searchexpert.exceptions.customer.CustomerAlreadyExistInFavouriteException;
+import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistAlreadyExistInFavouriteException;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerIdException;
 import pl.specialist.searchexpert.exceptions.customer.exceptions.CustomerNotFoundException;
 import pl.specialist.searchexpert.repositories.customer.CustomerRepo;
@@ -41,12 +41,14 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepo.save(customer);
     }
 
+    @Override
     public Set<Specialist> updateSpecialistFavoriteSet(Set<Specialist> setBeforeAddNewSpecialist, Specialist newestFavoriteSpecialist){
         if(setBeforeAddNewSpecialist.contains(newestFavoriteSpecialist)) throw new SpecialistAlreadyExistInFavouriteException("Specialist already exist in Your Favourite List");
         setBeforeAddNewSpecialist.add(newestFavoriteSpecialist);
         return setBeforeAddNewSpecialist;
     }
 
+    @Override
     public Set<Customer> updateMarkedByCustomersSet(Set<Customer> setBeforeAddedByCustomer, Customer newestMarkedByCustomer){
         if(setBeforeAddedByCustomer.contains(newestMarkedByCustomer)) throw new CustomerAlreadyExistInFavouriteException("Customer already exist in Your Marked Favourite List");
         setBeforeAddedByCustomer.add(newestMarkedByCustomer);

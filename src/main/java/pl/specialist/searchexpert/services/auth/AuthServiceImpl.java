@@ -133,6 +133,7 @@ public class AuthServiceImpl implements AuthService{
         return specialist;
     }
 
+    @Override
     public void confirmCustomerAccount(String confirmationToken){
         CustomerConfirmationToken token = customerConfirmationTokenRepo.findByConfirmationToken(confirmationToken);
 
@@ -144,6 +145,7 @@ public class AuthServiceImpl implements AuthService{
         }else throw new InvalidConfirmTokenException("This confirm token is wrong !");
     }
 
+    @Override
     public void confirmSpecialistAccount(String confirmationToken){
         SpecialistConfirmationToken token = specialistConfirmationTokenRepo.findByConfirmationToken(confirmationToken);
 
