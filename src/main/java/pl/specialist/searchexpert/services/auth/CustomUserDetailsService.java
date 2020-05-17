@@ -5,6 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import pl.specialist.searchexpert.domains.customer.Customer;
+import pl.specialist.searchexpert.domains.specialist.Specialist;
 import pl.specialist.searchexpert.repositories.customer.CustomerRepo;
 import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
 
@@ -25,10 +27,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if(specialistRepo.findByMail(username) != null){
-            return specialistRepo.findByMail(username);
-        }else if(customerRepo.findByMail(username) != null){
-            return customerRepo.findByMail(username);
+        Specialist spec = specialistRepo.findByMail(username);
+        Customer cust = customerRepo.findByMail(username);
+        if(spec != null){
+            return spec;
+        }else if(cust != null){
+            return cust;
         }else throw new UsernameNotFoundException("User not found");
     }
 

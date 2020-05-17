@@ -2,19 +2,17 @@ package pl.specialist.searchexpert.request;
 
 import pl.specialist.searchexpert.domains.opinion.Opinion;
 
-public class OpinionWithCustomerAndSpecialist {
+public class OpinionWithSpecialistId {
 
     private Opinion opinion;
-    private String customerId;
     private String specialistId;
 
-    public OpinionWithCustomerAndSpecialist(Opinion opinion, String customerId, String specialistId) {
+    public OpinionWithSpecialistId(Opinion opinion, String specialistId) {
         this.opinion = opinion;
-        this.customerId = customerId;
         this.specialistId = specialistId;
     }
 
-    public OpinionWithCustomerAndSpecialist() {
+    public OpinionWithSpecialistId() {
     }
 
     public Opinion getOpinion() {
@@ -23,14 +21,6 @@ public class OpinionWithCustomerAndSpecialist {
 
     public void setOpinion(Opinion opinion) {
         this.opinion = opinion;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
     }
 
     public String getSpecialistId() {

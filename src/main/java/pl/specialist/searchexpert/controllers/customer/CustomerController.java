@@ -6,11 +6,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.request.CustomerIdSpecialistIdBody;
+import pl.specialist.searchexpert.request.SpecialistIdBody;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.customer.CustomerServiceImpl;
 import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("api/customer")
@@ -19,25 +21,13 @@ public class CustomerController {
 
     private final CustomerServiceImpl customerServiceImpl;
 
-    private final SpecialistServiceImpl specialistServiceImpl;
 
     private final MapValidationErrorService mapValidationErrorService;
 
-    public CustomerController(CustomerServiceImpl customerServiceImpl, SpecialistServiceImpl specialistServiceImpl, MapValidationErrorService mapValidationErrorService) {
+    public CustomerController(CustomerServiceImpl customerServiceImpl, MapValidationErrorService mapValidationErrorService) {
         this.customerServiceImpl = customerServiceImpl;
-        this.specialistServiceImpl = specialistServiceImpl;
         this.mapValidationErrorService = mapValidationErrorService;
     }
-
-//    @PostMapping("/create")
-//    public ResponseEntity<?> createCustomerAccount(@Valid @RequestBody Customer customer, BindingResult bindingResult){
-//
-//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-//        if(errorMap != null) return errorMap;
-//
-//        Customer newCustomer = customerServiceImpl.createCustomerAccount(customer);
-//        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
-//    }
 
     @PostMapping("/update")
     public ResponseEntity<?> updateCustomerAccount(@Valid @RequestBody Customer customer, BindingResult bindingResult){
@@ -50,33 +40,25 @@ public class CustomerController {
 
     /*Specialist*/
     @PostMapping("/addSpec")
-    public ResponseEntity<?> addSpecialistToFavorite(@RequestBody CustomerIdSpecialistIdBody customerIdSpecialistIdBody){
-        customerServiceImpl.addSpecialistToFavorite(customerIdSpecialistIdBody.getSpecialistId(),customerIdSpecialistIdBody.getCustomerId());
+    public ResponseEntity<?> addSpecialistToFavorite(@RequestBody SpecialistIdBody specialistIdBody, Principal principal){
+        customerServiceImpl.addSpecialistToFavorite(specialistIdBody.getSpecialistId(),principal.getName());
 
         return new ResponseEntity<>("Specialist was added to your Favourite Specialist List !",HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteSpec/{customerId}/{specialistId}")
-    public ResponseEntity<?> deleteSpecialistFromCustomerFavorite(@PathVariable("customerId") String customerId, @PathVariable("specialistId") String specialistId){
-        customerServiceImpl.deleteSpecialistFromFavourite(customerId,specialistId);
+    @DeleteMapping("/deleteSpec/{specialistId}")
+    public ResponseEntity<?> deleteSpecialistFromCustomerFavorite(@PathVariable("specialistId") String specialistId , Principal principal){
+        customerServiceImpl.deleteSpecialistFromFavourite(principal.getName(),specialistId);
         return new ResponseEntity<>("Specialist was removed from Your Favourite Specialist List !",HttpStatus.OK);
     }
 
 
-    @DeleteMapping("/delete/{customerId}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable("customerId") String customerId){
-        customerServiceImpl.deleteCustomerByCustomerId(customerId);
-        return new ResponseEntity<>("Customer with ID: '" + customerId + "' was deleted",HttpStatus.OK);
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteCustomer(Principal principal){
+        customerServiceImpl.deleteCustomerByCustomerId(principal.getName());
+        return new ResponseEntity<>("Customer with ID: '" + principal.getName() + "' was deleted",HttpStatus.OK);
     }
 
-
-    @GetMapping("/getById/{customerId}")
-    public ResponseEntity<?> getCustomerById(@PathVariable("customerId") String customerId){
-
-        Customer customer = customerServiceImpl.findCustomerById(customerId);
-
-        return new ResponseEntity<>(customer,HttpStatus.OK);
-    }
 
     @GetMapping("/getByMail/{mail}")
     public ResponseEntity<?> getCustomerByMail(@PathVariable("mail") String mail){
