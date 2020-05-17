@@ -26,10 +26,7 @@ public class AmazonService {
 
     private AmazonS3 s3client;
 
-    private String endpointUrl = "${amazonProperties.s3.eu-central-1.amazonaws.com}";
-    private String bucketName = "${amazonProperties.specjalisto}";
-    private String accessKey = "${amazonProperties.AKIAR7SPURLZVS5T5YOP}";
-    private String secretKey = "${amazonProperties.0ZempZ/tuKXdFanqLJ7LJ+TzfyOE/nq5cpj48g7H}";
+
 
     @PostConstruct
     private void initializeAmazon(){
