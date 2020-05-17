@@ -15,7 +15,7 @@ public interface CommissionRepo extends JpaRepository<Commission,String> {
     Commission findByCommissionId(String commissionId);
     HashSet<Commission> findByCity(String city);
     HashSet<Commission> findByProfession(String profession);
-    HashSet<Commission> findByCustomer(Customer customer);
+//    HashSet<Commission> findByCustomer(Customer customer);
 
     /*Find SPECIALISTS by personal identity*/
     @Query("SELECT c FROM Commission c WHERE (:profession is null or c.profession = :profession) and (:city is null or c.city = :city)")

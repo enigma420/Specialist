@@ -1,7 +1,6 @@
 package pl.specialist.searchexpert.domains.commission;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import pl.specialist.searchexpert.domains.customer.Customer;
 
@@ -35,9 +34,9 @@ public class Commission {
     @Column(name = "profession")
     private String profession;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+//    @ManyToOne
+//    @JoinColumn(name = "customer_id", nullable = false)
+//    private Customer customer;
 
     public Commission() {
     }
@@ -51,13 +50,13 @@ public class Commission {
         this.commissionId = commissionId;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
+//    public Customer getCustomer() {
+//        return customer;
+//    }
+//
+//    public void setCustomer(Customer customer) {
+//        this.customer = customer;
+//    }
 
     public String getTitle() {
         return title;

@@ -28,6 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsService customUserDetailsService;
 
+
+
     @Autowired
     public SecurityConfig(JwtAuthenticationEntryPoint unAuthorizedHandler, CustomUserDetailsService customUserDetailsService) {
         this.unAuthorizedHandler = unAuthorizedHandler;
@@ -79,8 +81,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/commission/**").permitAll()
                 .antMatchers(SIGN_UP_AND_LOGIN_URLS).permitAll()
                 .anyRequest().authenticated();
-
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                http.addFilterAt(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 }
+
+
+//.access("hasAuthority('CUSTOMER') or hasAuthority('SPECIALIST')")
+//        ccess("hasAuthority('CUSTOMER') or hasAuthority('SPECIALIST')")
+//        cess("hasAuthority('CUSTOMER')")
+//        .access("hasAuthority('CUSTOMER') or hasAuthority('SPECIALIST')")

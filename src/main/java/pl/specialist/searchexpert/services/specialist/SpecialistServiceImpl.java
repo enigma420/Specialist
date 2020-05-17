@@ -1,6 +1,7 @@
 package pl.specialist.searchexpert.services.specialist;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pl.specialist.searchexpert.domains.customer.Customer;
 import pl.specialist.searchexpert.domains.opinion.Opinion;
 import pl.specialist.searchexpert.domains.specialist.Province;
@@ -10,8 +11,10 @@ import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistIdE
 import pl.specialist.searchexpert.exceptions.specialist.exceptions.SpecialistNotFoundException;
 import pl.specialist.searchexpert.repositories.specialist.SpecialistRepo;
 import pl.specialist.searchexpert.repositories.opinion.OpinionRepo;
+import pl.specialist.searchexpert.services.aws.AmazonService;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,9 +26,12 @@ public class SpecialistServiceImpl implements SpecialistService{
 
     private final OpinionRepo opinionRepo;
 
-    public SpecialistServiceImpl(SpecialistRepo specialistRepo, OpinionRepo opinionRepo) {
+    private final AmazonService amazonService;
+
+    public SpecialistServiceImpl(SpecialistRepo specialistRepo, OpinionRepo opinionRepo, AmazonService amazonService) {
         this.specialistRepo = specialistRepo;
         this.opinionRepo = opinionRepo;
+        this.amazonService = amazonService;
     }
 
     @Override
@@ -49,6 +55,16 @@ public class SpecialistServiceImpl implements SpecialistService{
 //            specialist.setNumberOfRatings(specialist.getNumberOfRatings()+1);
 //            specialist.setRateStars((specialist.getRateStars()+stars)/(specialist.getNumberOfRatings()));
 //        }
+        return specialistRepo.save(specialist);
+    }
+
+    @Override
+    public Specialist uploadProfileImg(MultipartFile file, String specialistId) throws IOException {
+
+
+
+        Specialist specialist = specialistRepo.findBySpecialistId(specialistId);
+        specialist.setProfileImg(amazonService.uploadFile(file));
         return specialistRepo.save(specialist);
     }
 

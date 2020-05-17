@@ -1,16 +1,22 @@
 package pl.specialist.searchexpert.controllers.specialist;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.specialist.searchexpert.domains.opinion.Opinion;
 import pl.specialist.searchexpert.domains.specialist.Province;
 import pl.specialist.searchexpert.domains.specialist.Specialist;
+import pl.specialist.searchexpert.request.SpecialistIdBody;
 import pl.specialist.searchexpert.services.MapValidationErrorService;
+import pl.specialist.searchexpert.services.aws.AmazonService;
 import pl.specialist.searchexpert.services.specialist.SpecialistServiceImpl;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.security.Principal;
 import java.util.HashSet;
 
 @RestController
@@ -18,24 +24,18 @@ import java.util.HashSet;
 @CrossOrigin
 public class SpecialistController {
 
+    private final AmazonService amazonService;
+
     private final SpecialistServiceImpl specialistServiceImpl;
 
     private final MapValidationErrorService mapValidationErrorService;
 
-    public SpecialistController(SpecialistServiceImpl specialistServiceImpl, MapValidationErrorService mapValidationErrorService) {
+
+    public SpecialistController(SpecialistServiceImpl specialistServiceImpl, MapValidationErrorService mapValidationErrorService,AmazonService amazonService) {
         this.specialistServiceImpl = specialistServiceImpl;
         this.mapValidationErrorService = mapValidationErrorService;
+        this.amazonService = amazonService;
     }
-
-//    @PostMapping("/create")
-//    public ResponseEntity<?> createSpecialistAccount(@Valid @RequestBody Specialist specialist, BindingResult bindingResult){
-//
-//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-//        if(errorMap != null) return errorMap;
-//
-//        Specialist newSpecialist = specialistServiceImpl.createSpecialistAccount(specialist);
-//        return new ResponseEntity<>(newSpecialist, HttpStatus.CREATED);
-//    }
 
     @PostMapping("/update")
     public ResponseEntity<?> updateSpecialistAccount(@Valid @RequestBody Specialist specialist, BindingResult bindingResult){
@@ -46,20 +46,21 @@ public class SpecialistController {
         return new ResponseEntity<>(existingSpecialist,HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{specialistId}")
-    public ResponseEntity<?> deleteSpecialist(@PathVariable("specialistId") String specialistId){
-        specialistServiceImpl.deleteSpecialistBySpecialistId(specialistId);
-        return new ResponseEntity<>("Specialist with ID: '" + specialistId + "' was deleted",HttpStatus.OK);
-    }
+    @PostMapping("/upload/profile_img")
+    public ResponseEntity<?> uploadProfileImage(@RequestPart("image")MultipartFile imageFile, Principal principal)throws IOException{
 
-    @GetMapping("/getById/{specialistId}")
-    public ResponseEntity<?> getSpecialistById(@PathVariable("specialistId") String specialistId){
+        Specialist specialist = specialistServiceImpl.uploadProfileImg(imageFile,principal.getName());
 
-        Specialist specialist = specialistServiceImpl.findSpecialistById(specialistId);
-
+//        return new ResponseEntity<>(specialist,HttpStatus.OK);
         return new ResponseEntity<>(specialist,HttpStatus.OK);
+
     }
 
+    @DeleteMapping("/delete/profile_img")
+    public String deleteProfileImage(@RequestPart("url") String fileUrl){
+
+        return this.amazonService.deleteFileFromS3Bucket(fileUrl);
+    }
     @GetMapping("/getByMail/{mail}")
     public ResponseEntity<?> getSpecialistByMail(@PathVariable("mail") String mail){
 
@@ -82,17 +83,11 @@ public class SpecialistController {
         HashSet<Specialist> groupOfSpecialists = specialistServiceImpl.findSpecialistsByProfessionAndLocation(province,city,profession);
         return new ResponseEntity<>(groupOfSpecialists,HttpStatus.OK);
     }
-
-    @GetMapping("/getAll")
-    public ResponseEntity<Iterable<Specialist>> getAllSpecialists(){
-       Iterable<Specialist> allSpecialists = specialistServiceImpl.findAllSpecialists();
-        return new ResponseEntity<>(allSpecialists,HttpStatus.OK);
-    }
-
-    @GetMapping("/get/opinions/{specialistId}")
-    public ResponseEntity<HashSet<Opinion>> getAllSpecialistOpinions(@PathVariable("specialistId") String specialistId){
-        HashSet<Opinion> allSpecialistOpinions = specialistServiceImpl.findAllSpecialistOpinionsById(specialistId);
-        return new ResponseEntity<>(allSpecialistOpinions,HttpStatus.OK);
-    }
+//
+//    @GetMapping("/get/opinions")
+//    public ResponseEntity<HashSet<Opinion>> getAllSpecialistOpinions(Principal principal){
+//        HashSet<Opinion> allSpecialistOpinions = specialistServiceImpl.findAllSpecialistOpinionsById(principal.getName());
+//        return new ResponseEntity<>(allSpecialistOpinions,HttpStatus.OK);
+//    }
 
 }

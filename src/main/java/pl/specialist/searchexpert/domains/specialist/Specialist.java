@@ -64,7 +64,8 @@ public class Specialist implements UserDetails {
     @Column(name = "average_rate")
     private Double averageRate = 0.0;
     private Double sumOfRatingsValue = 0.0;
-
+    @Column(name = "profile_img")
+    private String profileImg;
     private boolean enable;
 
     @JsonIgnore
@@ -73,6 +74,8 @@ public class Specialist implements UserDetails {
 
     public Specialist() {
     }
+
+
 
     public Specialist(String name,String surname,Province province, String city, String profession, String phoneNumber,String mail,Integer numberOfRatings,Double  averageRate) {
         this.name = name;
@@ -96,6 +99,14 @@ public class Specialist implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.mail = mail;
         this.password = password;
+    }
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
     }
 
     public void setEnable(boolean enable) {
