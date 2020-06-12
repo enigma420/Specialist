@@ -34,7 +34,8 @@ public class EmailSenderService {
         mailMessage.setSubject("Complete Registration!");
         mailMessage.setFrom("specjalisto@gmail.com");
         mailMessage.setText("Hello Specialist ! \nTo confirm your account, please click here : \n"
-                +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
+//                +"http://localhost:8080/confirm-account?token="
+                +confirmationToken.getConfirmationToken());
 
         sendEmail(mailMessage);
         long elapsedTime = System.currentTimeMillis() - startTime;

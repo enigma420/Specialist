@@ -24,10 +24,10 @@ public class LoginRequest {
     private String password;
 
 
-//    public String getMail() {
-//
-//        return mail;
-//    }
+    public String getMail() {
+
+        return mail;
+    }
 
     public void setMail(String mail) {
         this.mail = mail;
