@@ -26,7 +26,10 @@ public class AmazonService {
 
     private AmazonS3 s3client;
 
-
+    private String accessKey = "jhgjhg";
+    private String secretKey = "jhgjhg";
+    private String bucketName = "yjhgf";
+    private String endpointUrl = "hghjgfhgf";
 
     @PostConstruct
     private void initializeAmazon(){

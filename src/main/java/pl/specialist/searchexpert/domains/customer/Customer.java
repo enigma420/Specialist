@@ -53,9 +53,9 @@ public class Customer implements UserDetails {
     @ManyToMany
     private Set<Specialist> markedSpecialists;
 
-//    @JsonIgnore
-//    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY,mappedBy = "customer")
-//    private Set<Commission> commissions;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY,mappedBy = "customer")
+    private Set<Commission> commissions;
 
     public Customer() {
     }
@@ -126,14 +126,14 @@ public class Customer implements UserDetails {
     public void setMarkedSpecialists(Set<Specialist> markedSpecialists) {
         this.markedSpecialists = markedSpecialists;
     }
-//
-//    public Set<Commission> getCommissions() {
-//        return commissions;
-//    }
-//
-//    public void setCommissions(Set<Commission> commissions) {
-//        this.commissions = commissions;
-//    }
+
+    public Set<Commission> getCommissions() {
+        return commissions;
+    }
+
+    public void setCommissions(Set<Commission> commissions) {
+        this.commissions = commissions;
+    }
 
     public String getPassword() {
         return password;

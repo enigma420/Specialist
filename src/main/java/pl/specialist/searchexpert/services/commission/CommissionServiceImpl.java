@@ -31,23 +31,22 @@ public class CommissionServiceImpl implements CommissionService {
     }
 
     @Override
-    public Commission createCommission(Commission commission) {
+    public Commission createCommission(Commission commission, String customerId) {
         try{
-//        Customer customer = new Customer();
-//            commission.setCustomer(customer);
-
+        Customer customer = customerRepo.findByCustomerId(customerId);
+            commission.setCustomer(customer);
         return commissionRepo.save(commission);
         }catch (Exception e){
             throw new CommissionIdException("Commission with ID '" + commission.getCommissionId() + "' already exist" +
             "' ,city: '" + commission.getCity() +
-//            "' ,customer: '" + commission.getCustomer() +
+            "' ,customer: '" + commission.getCustomer() +
             "' ,title: '" + commission.getTitle() +
             "' ,description: '"+ commission.getDescription() +
             "' ,profession: '" + commission.getProfession() +"'");
         }
 
     }
-//
+
 //    @Override
 //    public Commission updateCommission(Commission commission,String customerId) {
 //        Customer customer = customerRepo.findByCustomerId(customerId);
@@ -57,41 +56,39 @@ public class CommissionServiceImpl implements CommissionService {
 //        commission.setCustomer(customerRepo.findByCustomerId(customerId));
 //        return commissionRepo.save(commission);
 //    }
-//
-//    @Override
-//    public void deleteCommissionByCommissionId(String commissionId,String nickname) {
-//        if(commissionRepo.count() == 0) throw new CommissionNotFoundException("You cannot delete Commission because doesn't exist");
-//        Commission commission = commissionRepo.findByCommissionId(commissionId);
-//        if(commission == null) throw new CommissionIdException("Cannot Delete Commission with ID: '" + commissionId + "' because doesn't exist");
-//        commissionRepo.delete(findCommissionByCommissionId(commissionId,nickname));
-//    }
-//
-//
-//
-//    @Override
-//    public Commission findCommissionByCommissionId(String commissionId,String nickname) {
-//        if(commissionRepo.count() == 0) throw new SpecialistNotFoundException("Any Commission isn't exist");
-//        Commission commission = commissionRepo.findByCommissionId(commissionId);
-//
-//        if(commission == null) throw new CommissionIdException("Commission with ID: '" + commissionId + "' doesn't exist");
-//
-//        return commission;
-//    }
-//
-//
-//    @Override
-//    public HashSet<Commission> findCommissionsByProfessionAndLocation(String profession, String city) {
-//        if(commissionRepo.count() == 0) throw new SpecialistNotFoundException("Any Commission isn't exist");
-//        HashSet<Commission> setOfCommissions = commissionRepo.findCommissionsByProfessionAndCity(profession,city);
-//        if(setOfCommissions.size() == 0) throw new CommissionNotFoundException("Any Commissions with profession: '" + city + "' doesn't exist");
-//        return setOfCommissions;
-//    }
-//
-//    @Override
-//    public Iterable<Commission> findAllCustomerCommissions(String customerId) {
-//        Customer customer = customerRepo.findByCustomerId(customerId);
-//        if(customer.getCommissions().isEmpty()) throw new SpecialistNotFoundException("Customer with ID: '" + customerId + "' don't have any Commissions");
-//
-//        return commissionRepo.findByCustomer(customer);
-//    }
+
+    @Override
+    public void deleteCommissionByCommissionId(String commissionId,String nickname) {
+        if(commissionRepo.count() == 0) throw new CommissionNotFoundException("You cannot delete Commission because doesn't exist");
+        Commission commission = commissionRepo.findByCommissionId(commissionId);
+        if(commission == null) throw new CommissionIdException("Cannot Delete Commission with ID: '" + commissionId + "' because doesn't exist");
+        commissionRepo.delete(findCommissionByCommissionId(commissionId,nickname));
+    }
+
+    @Override
+    public Commission findCommissionByCommissionId(String commissionId,String nickname) {
+        if(commissionRepo.count() == 0) throw new SpecialistNotFoundException("Any Commission isn't exist");
+        Commission commission = commissionRepo.findByCommissionId(commissionId);
+
+        if(commission == null) throw new CommissionIdException("Commission with ID: '" + commissionId + "' doesn't exist");
+
+        return commission;
+    }
+
+
+    @Override
+    public HashSet<Commission> findCommissionsByProfessionAndLocation(String profession, String city) {
+        if(commissionRepo.count() == 0) throw new SpecialistNotFoundException("Any Commission isn't exist");
+        HashSet<Commission> setOfCommissions = commissionRepo.findCommissionsByProfessionAndCity(profession,city);
+        if(setOfCommissions.size() == 0) throw new CommissionNotFoundException("Any Commissions with profession: '" + city + "' doesn't exist");
+        return setOfCommissions;
+    }
+
+    @Override
+    public Iterable<Commission> findAllCustomerCommissions(String customerId) {
+        Customer customer = customerRepo.findByCustomerId(customerId);
+        if(customer.getCommissions().isEmpty()) throw new SpecialistNotFoundException("Customer with ID: '" + customerId + "' don't have any Commissions");
+
+        return commissionRepo.findByCustomer(customer);
+    }
 }

@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 
-@Validated
+
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin

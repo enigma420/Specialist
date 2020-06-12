@@ -6,7 +6,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.specialist.searchexpert.domains.opinion.Opinion;
 import pl.specialist.searchexpert.request.OpinionWithSpecialistId;
-import pl.specialist.searchexpert.services.MapValidationErrorService;
 import pl.specialist.searchexpert.services.opinion.OpinionServiceImpl;
 
 import javax.validation.Valid;
